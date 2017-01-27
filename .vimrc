@@ -60,13 +60,11 @@ nnoremap k gk
 nmap <leader>rl :set rnu<cr>
 nmap <leader>al :set nornu<cr>
 
-map <D-j> <C-W>j
-map <D-k> <C-W>k
-map <D-h> <C-W>h
-map <D-l> <C-W>l
-
-nnoremap <D-[> :bp
-nnoremap <D-]> :bn
+" Working with windows/buffers/tabs
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 set rtp+=~/.vim/bundle/Vundle.vim
 
@@ -96,6 +94,7 @@ map <C-n> :NERDTreeTabsToggle<CR>
 autocmd VimEnter * NERDTreeTabsOpen
 let g:nertdtree_tabs_open_on_console_startup = 1
 let NERDTreeShowBookmarks = 1
+let NERDTreeChDirMode = 2
 
 
 colorscheme gruvbox
