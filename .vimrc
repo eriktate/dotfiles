@@ -56,6 +56,9 @@ set list
 nnoremap j gj
 nnoremap k gk
 
+" Change line style (rnu = relativenumber)
+nmap <leader>rl :set rnu<cr>
+nmap <leader>al :set nornu<cr>
 
 map <D-j> <C-W>j
 map <D-k> <C-W>k
