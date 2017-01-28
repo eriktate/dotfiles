@@ -96,8 +96,10 @@ let g:nertdtree_tabs_open_on_console_startup = 1
 let NERDTreeShowBookmarks = 1
 let NERDTreeChDirMode = 2
 
-
+" Set colorscheme
 colorscheme gruvbox
+set background=dark
+
 au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
