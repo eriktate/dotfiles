@@ -6,11 +6,7 @@ set modelines=0
 set number
 set ruler
 set visualbell
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
 set wrap
-set expandtab
 set noshiftround
 set splitright
 set splitbelow
@@ -24,6 +20,15 @@ set so=7
 set hid
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
+
+" Whitespace settings (defaults)
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set noexpandtab
+
+" Whitespace settings (filetype)
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 
 " Set language and encoding
 set encoding=utf-8
@@ -118,11 +123,20 @@ endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
-"Vim Go
-let g:go_fmt_command = "goimports"
-map <leader>d :GoDef<CR>
 
-" Syntastic
+""" Vim Go
+let g:go_fmt_command = "goimports"
+let g:go_auto_type_info = 1
+let g:go_updatetime = 500
+" Variations of go-to-declaration
+autocmd FileType go nmap <leader>ds <Plug>(go-def-split)
+autocmd FileType go nmap <leader>dv <Plug>(go-def-vertical)
+autocmd FileType go nmap <leader>dt <Plug>(go-def-tab)
+" Show implemented interfaces of type under cursor
+autocmd FileType go nmap <leader>s <Plug>(go-implements)
+
+
+""" Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -131,3 +145,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+" Statusline
+let g:airline_powerline_fonts = 1
+set laststatus=2
