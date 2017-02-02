@@ -77,7 +77,7 @@ call vundle#begin()
 
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'fatih/vim-go'
 Plugin 'airblade/vim-gitgutter'
@@ -88,6 +88,7 @@ Plugin 'easymotion/vim-easymotion'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'vim-airline/vim-airline-themes'
 Bundle 'morhetz/gruvbox'
 
 call vundle#end()
@@ -135,6 +136,10 @@ autocmd FileType go nmap <leader>dt <Plug>(go-def-tab)
 " Show implemented interfaces of type under cursor
 autocmd FileType go nmap <leader>s <Plug>(go-implements)
 
+" Statusline
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+set laststatus=2
 
 """ Syntastic
 set statusline+=%#warningmsg#
@@ -148,6 +153,3 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
-" Statusline
-let g:airline_powerline_fonts = 1
-set laststatus=2

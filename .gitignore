@@ -5,3 +5,6 @@
 !.*
 !LICENSE
 !README.md
+
+# But ignore swp...
+*.swp
