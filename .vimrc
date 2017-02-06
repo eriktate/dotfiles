@@ -29,6 +29,7 @@ set noexpandtab
 
 " Whitespace settings (filetype)
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 
 " Set language and encoding
 set encoding=utf-8
