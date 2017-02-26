@@ -1,5 +1,35 @@
-set nocompatible
+""" START PLUGIN CONFIGS
 filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'fatih/vim-go'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'Shougo/neocomplete'
+Plugin 'bling/vim-airline'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+Plugin 'ternjs/tern_for_vim'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'majutsushi/tagbar'
+Plugin 'kien/ctrlp.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'jiangmiao/auto-pairs'
+Bundle 'morhetz/gruvbox'
+
+call vundle#end()
+
+""" NATIVE VIM CONFIGS
+set nocompatible
 syntax on
 filetype plugin indent on
 set modelines=0
@@ -59,6 +89,8 @@ map <leader><space> :let @/=''<cr> " clear search
 " Show tabs/newlines in editor
 set listchars=tab:▸\ ,eol:¬
 set list
+
+" Move up and down visual lines (works well with wrapping)
 nnoremap j gj
 nnoremap k gk
 
@@ -66,40 +98,11 @@ nnoremap k gk
 nmap <leader>rl :set rnu<cr>
 nmap <leader>al :set nornu<cr>
 
-" Working with windows/buffers/tabs
+" Working with windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
-
-""" START PLUGIN CONFIGS
-set rtp+=~/.vim/bundle/Vundle.vim
-
-call vundle#begin()
-
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/syntastic'
-Plugin 'tpope/vim-fugitive'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'fatih/vim-go'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'Shougo/neocomplete'
-Plugin 'bling/vim-airline'
-Plugin 'pangloss/vim-javascript'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'majutsushi/tagbar'
-Plugin 'kien/ctrlp.vim'
-Plugin 'tpope/vim-surround'
-Plugin 'jiangmiao/auto-pairs'
-Bundle 'morhetz/gruvbox'
-
-call vundle#end()
-
-filetype plugin indent on
 
 " NERDTree stuff
 map <C-n> :NERDTreeTabsToggle<CR>
@@ -112,6 +115,7 @@ let NERDTreeChDirMode = 2
 colorscheme gruvbox
 set background=dark
 
+" Settings for editing Jenkinsfiles
 au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
@@ -133,14 +137,16 @@ inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
 """ Vim Go
 let g:go_fmt_command = "goimports"
-let g:go_auto_type_info = 1
+let g:go_auto_type_info = 0
 let g:go_updatetime = 500
 " Variations of go-to-declaration
 autocmd FileType go nmap <leader>ds <Plug>(go-def-split)
 autocmd FileType go nmap <leader>dv <Plug>(go-def-vertical)
 autocmd FileType go nmap <leader>dt <Plug>(go-def-tab)
+
 " Show implemented interfaces of type under cursor
 autocmd FileType go nmap <leader>s <Plug>(go-implements)
+autocmd FileType go nmap <leader>i <Plug>(go-info)
 
 " Statusline
 let g:airline_powerline_fonts = 1
@@ -157,7 +163,14 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 """ Tagbar
 nmap <leader>t :TagbarToggle<CR>
+
+""" Autopairs
+let g:AutoPairsCenterLine = 0
+
+""" Javascript
+let g:jsx_ext_required = 0
