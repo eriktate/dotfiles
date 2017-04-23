@@ -21,7 +21,7 @@ Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'majutsushi/tagbar'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'jiangmiao/auto-pairs'
 Bundle 'morhetz/gruvbox'
@@ -104,9 +104,13 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+nmap <S-Down> :res -16<cr>
+nmap <S-Up> :res +16<cr>
+nmap <S-Left> :vertical resize -16<cr>
+nmap <S-Right> :vertical resize +16<cr>
+
 " NERDTree stuff
 map <C-n> :NERDTreeTabsToggle<CR>
-autocmd VimEnter * NERDTreeTabsOpen
 let g:nertdtree_tabs_open_on_console_startup = 1
 let NERDTreeShowBookmarks = 1
 let NERDTreeChDirMode = 2
@@ -119,7 +123,7 @@ set background=dark
 au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
-"Neocomplete 
+"Neocomplete
 let g:acp_enableAtStartup = 0
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
@@ -139,6 +143,10 @@ inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 0
 let g:go_updatetime = 500
+
+" Show references to the current token
+autocmd FileType go nmap gr <Plug>(go-referrers)
+
 " Variations of go-to-declaration
 autocmd FileType go nmap <leader>ds <Plug>(go-def-split)
 autocmd FileType go nmap <leader>dv <Plug>(go-def-vertical)
