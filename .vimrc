@@ -12,9 +12,12 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'fatih/vim-go'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'Shougo/neocomplete'
+Plugin 'OmniSharp/omnisharp-vim'
+Plugin 'tpope/vim-dispatch'
 Plugin 'bling/vim-airline'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
+Plugin 'leafgarland/typescript-vim'
 Plugin 'ternjs/tern_for_vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'jistr/vim-nerdtree-tabs'
@@ -27,6 +30,18 @@ Plugin 'jiangmiao/auto-pairs'
 Bundle 'morhetz/gruvbox'
 
 call vundle#end()
+
+""" GUI CONFIGS
+set guifont=monofur_for_Powerline:h11
+" Hide menubar
+set guioptions -=m
+" Hide right scroll
+set guioptions -=r
+" Hide left scroll
+set guioptions -=L
+" Hide toolbar
+set guioptions -=T
+set mouse=
 
 """ NATIVE VIM CONFIGS
 set nocompatible
@@ -123,6 +138,10 @@ set background=dark
 au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
+" Settings for using riot.js with typescript.
+au BufNewFile,BufRead *.tag set ft=typescript
+au BufNewFile,BufRead *.tag set syntax=typescript
+
 "Neocomplete
 let g:acp_enableAtStartup = 0
 let g:neocomplete#enable_at_startup = 1
@@ -137,7 +156,14 @@ if !exists('g:neocomplete#keyword_patterns')
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
 
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+
+let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
 
 """ Vim Go
 let g:go_fmt_command = "goimports"
@@ -182,3 +208,8 @@ let g:AutoPairsCenterLine = 0
 
 """ Javascript
 let g:jsx_ext_required = 0
+
+""" Omnisharp
+let g:OmniSharp_server_type = 'roslyn'
+let g:Omnisharp_start_server = 0
+let g:Omnisharp_stop_server = 0
