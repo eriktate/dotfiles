@@ -22,7 +22,6 @@ Plugin 'ternjs/tern_for_vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'vim-airline/vim-airline-themes'
 Plugin 'majutsushi/tagbar'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-surround'
@@ -196,7 +195,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_go_checkers = ['gometalinter']
+let g:syntastic_go_gometalinter = "--vendor, --disable-all, --enable=vet, --enable=golint, --enable=ineffassign, --enable=gocyclo, --json, ."
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
@@ -208,6 +208,9 @@ let g:AutoPairsCenterLine = 0
 
 """ Javascript
 let g:jsx_ext_required = 0
+
+""" CtrlP
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git|vendor'
 
 """ Omnisharp
 let g:OmniSharp_server_type = 'roslyn'
