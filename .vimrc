@@ -31,16 +31,18 @@ Bundle 'morhetz/gruvbox'
 call vundle#end()
 
 """ GUI CONFIGS
-set guifont=monofur_for_Powerline:h11
-" Hide menubar
-set guioptions -=m
-" Hide right scroll
-set guioptions -=r
-" Hide left scroll
-set guioptions -=L
-" Hide toolbar
-set guioptions -=T
-set mouse=
+if has("gui_running")
+	set guifont=monofur_for_Powerline:h11
+	" Hide menubar
+	set guioptions -=m
+	" Hide right scroll
+	set guioptions -=r
+	" Hide left scroll
+	set guioptions -=L
+	" Hide toolbar
+	set guioptions -=T
+	set mouse=
+endif
 
 """ NATIVE VIM CONFIGS
 set nocompatible
