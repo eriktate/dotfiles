@@ -26,6 +26,9 @@ Plugin 'majutsushi/tagbar'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'ElmCast/elm-vim'
+Plugin 'hashivim/vim-terraform'
+Plugin 'tpope/vim-commentary'
 Bundle 'morhetz/gruvbox'
 
 call vundle#end()
@@ -73,9 +76,12 @@ set shiftwidth=4
 set softtabstop=4
 set noexpandtab
 
-" Whitespace settings (filetype)
+" Filetype settings
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype elm setlocal ts=4 sts=4 sw=4 expandtab
+autocmd Filetype terraform setlocal commentstring=#%s
 
 " Set language and encoding
 set encoding=utf-8
@@ -166,6 +172,12 @@ endif
 
 let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
 
+""" Autocompletion for elm
+call neocomplete#util#set_default_dictionary(
+  \ 'g:neocomplete#sources#omni#input_patterns',
+  \ 'elm',
+  \ '\.')
+
 """ Vim Go
 let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 0
@@ -201,6 +213,7 @@ let g:syntastic_go_checkers = ['gometalinter']
 let g:syntastic_go_gometalinter = "--vendor, --disable-all, --enable=vet, --enable=golint, --enable=ineffassign, --enable=gocyclo, --json, ."
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:elm_syntastic_show_warnings = 1
 
 """ Tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -218,3 +231,9 @@ let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git|vendor'
 let g:OmniSharp_server_type = 'roslyn'
 let g:Omnisharp_start_server = 0
 let g:Omnisharp_stop_server = 0
+
+""" Elm
+let g:elm_format_autosave = 1
+
+""" Terraform
+let g:terraform_align=1
