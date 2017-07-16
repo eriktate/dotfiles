@@ -29,6 +29,7 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'ElmCast/elm-vim'
 Plugin 'hashivim/vim-terraform'
 Plugin 'tpope/vim-commentary'
+Plugin 'cespare/vim-toml'
 Bundle 'morhetz/gruvbox'
 
 call vundle#end()
