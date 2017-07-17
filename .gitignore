@@ -1,10 +1,2 @@
-# Ignore everything
-*
-
-# But not these files...
-!.*
-!LICENSE
-!README.md
-
 # But ignore swp...
 *.swp
