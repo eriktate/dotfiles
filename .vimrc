@@ -29,6 +29,8 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'ElmCast/elm-vim'
 Plugin 'hashivim/vim-terraform'
 Plugin 'tpope/vim-commentary'
+Plugin 'cespare/vim-toml'
+Plugin 'alvan/vim-closetag'
 Bundle 'morhetz/gruvbox'
 
 call vundle#end()
@@ -237,3 +239,6 @@ let g:elm_format_autosave = 1
 
 """ Terraform
 let g:terraform_align=1
+
+""" HTML
+let g:html_indent_inctags = "main,p"
