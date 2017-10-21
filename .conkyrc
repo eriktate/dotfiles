@@ -17,7 +17,7 @@ conky.config={
 conky.text = [[
 [{ "full_text": "1:${cpu cpu1}% 2:${cpu cpu2}% 3:${cpu cpu3}% 4:${cpu cpu4}%", "color": "\#b16286" },
 { "full_text": ": $memperc%", "color": "\#8ec07c" },
-{ "full_text": ":${upspeed ens33}", "color": "\#d65d0e" },
-{ "full_text": ":${downspeed ens33}", "color": "\#d65d0e" },
+{ "full_text": ":${upspeed enp2s0}", "color": "\#d65d0e" },
+{ "full_text": ":${downspeed enp2s0}", "color": "\#d65d0e" },
 { "full_text": "${time %a, %d %b %G %H:%M}", "color": "\#928374" }],
 ]]

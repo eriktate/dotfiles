@@ -31,6 +31,9 @@ Plugin 'hashivim/vim-terraform'
 Plugin 'tpope/vim-commentary'
 Plugin 'cespare/vim-toml'
 Plugin 'alvan/vim-closetag'
+Plugin 'rust-lang/rust.vim'
+Plugin 'tikhomirov/vim-glsl'
+Plugin 'elixir-editors/vim-elixir'
 Bundle 'morhetz/gruvbox'
 
 call vundle#end()
@@ -142,6 +145,7 @@ let NERDTreeChDirMode = 2
 " Set colorscheme
 colorscheme gruvbox
 set background=dark
+set termguicolors
 
 " Settings for editing Jenkinsfiles
 au BufReadPost Jenkinsfile set syntax=groovy
@@ -180,10 +184,13 @@ call neocomplete#util#set_default_dictionary(
   \ 'elm',
   \ '\.')
 
-""" Vim Go
+""" Go Stuff
 let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 0
 let g:go_updatetime = 500
+
+"let g:go_metalinter_autosave = 1
+"let g:go_metalinter_autosave_enabled = ['golint', 'vet', 'gocyclo', 'errcheck']
 
 " Show references to the current token
 autocmd FileType go nmap gr <Plug>(go-referrers)
@@ -212,10 +219,11 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_go_checkers = ['gometalinter']
-let g:syntastic_go_gometalinter = "--vendor, --disable-all, --enable=vet, --enable=golint, --enable=ineffassign, --enable=gocyclo, --json, ."
+let g:syntastic_go_gometalinter_args = ['--disable-all', '--vendor', '--enable=vet', '--enable=golint', '--enable=errcheck']
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:elm_syntastic_show_warnings = 1
+
 
 """ Tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -242,3 +250,13 @@ let g:terraform_align=1
 
 """ HTML
 let g:html_indent_inctags = "main,p"
+
+""" C
+"let g:clang_library_path='/usr/lib/libclang.so.4.0'
+
+""" GLSL
+autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
+
+""" Rust
+let g:rustfmt_autosave = 1
+

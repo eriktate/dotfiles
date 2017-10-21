@@ -5,21 +5,35 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Load fzf config if present
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules,vendor}" 2> /dev/null'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+bind -x '"\C-p": vim $(fzf);'
+
 alias ls='ls --color=auto'
 alias chrome="google-chrome-stable & disown"
+alias starti3="startx ~/.xinitrc i3"
+alias startflux="startx ~/.xinitrc flux"
+alias startmonad="startx ~/.xinitrc monad"
+alias startsteam="startx ~/.xinitrc steam"
+alias crankit="sudo cpupower frequency-set -g performance & sudo sysctl vm.swappiness=30"
+alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappiness=60"
 
 #### GO STUFF ####
-export GOPATH=/go
-export GOBIN=/go/bin
+export GOPATH=~/go
+export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOBIN
 
 #### BECAUSE I'M LAZY ####
 alias gs="git status"
 alias vimrc="vim ~/dotfiles/.vimrc"
-alias gowork="cd /go/src/github.com/eriktate"
+alias bashrc="vim ~/dotfiles/.bashrc"
+alias gowork="cd $GOPATH/src/github.com/eriktate"
+alias gogfx="cd ~/projects/learn-graphics"
 # Add tab completion to git things
-if [ -f ~/.git-completion.bash ]; then
-	. ~/.git-completion.bash
+if [ -f ~/git/contrib/completion/git-completion.bash ]; then
+	. ~/git/contrib/completion/git-completion.bash
 fi
 
 
@@ -48,5 +62,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 export LOCAL_DYNAMO="http://localhost:8000"
 export INKWELL_BLOGS_TABLE="blogs"
 export INKWELL_BLOGS_BUCKET="inkwell-test"
+export CPATH="./include:./lib"
 
 source ~/.awsrc
+source ~/aur/nvm/init-nvm.sh

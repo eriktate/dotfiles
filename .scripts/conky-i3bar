@@ -6,4 +6,4 @@ echo '['
 
 echo '[],'
 
-exec conky -c ~/.conkyrc
+exec conky -c ~/dotfiles/.conkyrc
