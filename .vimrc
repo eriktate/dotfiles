@@ -27,6 +27,11 @@ Plugin 'ElmCast/elm-vim'
 Plugin 'hashivim/vim-terraform'
 Plugin 'junegunn/goyo.vim'
 Plugin 'kylef/apiblueprint.vim'
+Plugin 'cespare/vim-toml'
+Plugin 'alvan/vim-closetag'
+Plugin 'rust-lang/rust.vim'
+Plugin 'tikhomirov/vim-glsl'
+Plugin 'elixir-editors/vim-elixir'
 Bundle 'morhetz/gruvbox'
 Bundle 'eriktate/vim-protobuf'
 
@@ -184,12 +189,15 @@ call neocomplete#util#set_default_dictionary(
   \ 'elm',
   \ '\.')
 
-""" Vim Go
+""" Go Stuff
 let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 0
 let g:go_updatetime = 500
 
-""" Show references to the current token
+"let g:go_metalinter_autosave = 1
+"let g:go_metalinter_autosave_enabled = ['golint', 'vet', 'gocyclo', 'errcheck']
+
+" Show references to the current token
 autocmd FileType go nmap gr <Plug>(go-referrers)
 
 """ Variations of go-to-declaration
@@ -239,3 +247,16 @@ nmap <leader>df :Goyo<cr>
 
 """ Markdown
 autocmd BufEnter *.md exe 'noremap <F5> :!open -a "Google Chrome" %:p<CR>'
+
+""" HTML
+let g:html_indent_inctags = "main,p"
+
+""" C
+"let g:clang_library_path='/usr/lib/libclang.so.4.0'
+
+""" GLSL
+autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
+
+""" Rust
+let g:rustfmt_autosave = 1
+
