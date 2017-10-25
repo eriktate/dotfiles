@@ -21,7 +21,6 @@ Plugin 'ternjs/tern_for_vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'majutsushi/tagbar'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'ElmCast/elm-vim'
 Plugin 'hashivim/vim-terraform'
@@ -31,6 +30,8 @@ Plugin 'cespare/vim-toml'
 Plugin 'alvan/vim-closetag'
 Plugin 'rust-lang/rust.vim'
 Plugin 'tikhomirov/vim-glsl'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 Plugin 'elixir-editors/vim-elixir'
 Bundle 'morhetz/gruvbox'
 Bundle 'eriktate/vim-protobuf'
@@ -125,7 +126,10 @@ nnoremap k gk
 nmap <leader>rl :set rnu<cr>
 nmap <leader>al :set nornu<cr>
 
-""" Working with windows
+" File search
+nmap <C-p> :Files<cr>
+
+" Working with windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -260,3 +264,10 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 """ Rust
 let g:rustfmt_autosave = 1
 
+""" FZF
+let g:rg_command = '
+  \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
+  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf}"
+  \ -g "!{.git,node_modules,vendor}/*" '
+
+command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
