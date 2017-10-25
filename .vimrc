@@ -21,7 +21,6 @@ Plugin 'ternjs/tern_for_vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'majutsushi/tagbar'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'ElmCast/elm-vim'
 Plugin 'hashivim/vim-terraform'
@@ -30,8 +29,11 @@ Plugin 'kylef/apiblueprint.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'alvan/vim-closetag'
 Plugin 'rust-lang/rust.vim'
+Plugin 'racer-rust/vim-racer'
 Plugin 'tikhomirov/vim-glsl'
 Plugin 'elixir-editors/vim-elixir'
+Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plugin 'junegunn/fzf.vim'
 Bundle 'morhetz/gruvbox'
 Bundle 'eriktate/vim-protobuf'
 
@@ -124,6 +126,7 @@ nnoremap k gk
 """ Change line style (rnu = relativenumber)
 nmap <leader>rl :set rnu<cr>
 nmap <leader>al :set nornu<cr>
+nmap <C-p> :Files<cr>
 
 """ Working with windows
 map <C-j> <C-W>j
@@ -228,9 +231,6 @@ let g:AutoPairsCenterLine = 0
 """ Javascript
 let g:jsx_ext_required = 0
 
-""" CtrlP
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git|vendor'
-
 """ Elm
 let g:elm_format_autosave = 1
 
@@ -260,3 +260,10 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 """ Rust
 let g:rustfmt_autosave = 1
 
+""" Fuzzy file searchlet g:rg_command = '
+let g:rg_command = '
+	\ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
+	\ -g "*.{js,json,md,html,jsx,go,rs,c,h,elm,py,rb,conf,config,cpp,hpp,hs}"
+	\ -g "!{.git,node_modules,vendor,.DS_Store}/*" '
+
+command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
