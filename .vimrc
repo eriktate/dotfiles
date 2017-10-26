@@ -142,10 +142,10 @@ let NERDTreeShowBookmarks = 1
 let NERDTreeChDirMode = 2
 
 """ Set colorscheme
+let g:gruvbox_contrast_dark = 'soft'
 colorscheme gruvbox
 set background=dark
 set termguicolors
-let g:gruvbox_contrast_dark = 'soft'
 
 """ Settings for editing Jenkinsfiles
 au BufReadPost Jenkinsfile set syntax=groovy
