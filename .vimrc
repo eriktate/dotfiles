@@ -17,7 +17,6 @@ Plugin 'Shougo/neocomplete'
 Plugin 'bling/vim-airline'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'ternjs/tern_for_vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'majutsushi/tagbar'
@@ -128,7 +127,10 @@ nmap <leader>rl :set rnu<cr>
 nmap <leader>al :set nornu<cr>
 nmap <C-p> :Files<cr>
 
-""" Working with windows
+" File search
+nmap <C-p> :Files<cr>
+
+" Working with windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -185,6 +187,7 @@ let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 """ Couldn't figure out how to get this to trigger automatic completion. Using
 """ tab initiated completion for now.
 " let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
+" let g:neocomplete#sources#omni#input_patterns.rust = '[^.[:digit:] *\t]\%(\.\|\::\)\%(\h\w*\)\?'
 
 """ Autocompletion for elm
 call neocomplete#util#set_default_dictionary(
@@ -229,6 +232,7 @@ nmap <leader>t :TagbarToggle<CR>
 let g:AutoPairsCenterLine = 0
 
 """ Javascript
+" would prefer for this to be 1.
 let g:jsx_ext_required = 0
 
 """ Elm
@@ -259,11 +263,18 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 """ Rust
 let g:rustfmt_autosave = 1
+set hidden " Not sure if I need this
+let g:racer_cmd = "~/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
 
-""" Fuzzy file searchlet g:rg_command = '
+" Goto def for rust
+autocmd FileType rust nmap <leader>gd <Plug>(rust-def)
+autocmd FileType rust nmap <leader>gs <Plug>(rust-def-vertical)
+
+""" FZF
 let g:rg_command = '
-	\ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-	\ -g "*.{js,json,md,html,jsx,go,rs,c,h,elm,py,rb,conf,config,cpp,hpp,hs}"
-	\ -g "!{.git,node_modules,vendor,.DS_Store}/*" '
+  \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
+  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf}"
+  \ -g "!{.git,node_modules,vendor,.DS_Store}/*" '
 
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
