@@ -17,7 +17,6 @@ Plugin 'Shougo/neocomplete'
 Plugin 'bling/vim-airline'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'ternjs/tern_for_vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'majutsushi/tagbar'
@@ -29,10 +28,11 @@ Plugin 'kylef/apiblueprint.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'alvan/vim-closetag'
 Plugin 'rust-lang/rust.vim'
+Plugin 'racer-rust/vim-racer'
 Plugin 'tikhomirov/vim-glsl'
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
 Plugin 'elixir-editors/vim-elixir'
+Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plugin 'junegunn/fzf.vim'
 Bundle 'morhetz/gruvbox'
 Bundle 'eriktate/vim-protobuf'
 
@@ -125,6 +125,7 @@ nnoremap k gk
 """ Change line style (rnu = relativenumber)
 nmap <leader>rl :set rnu<cr>
 nmap <leader>al :set nornu<cr>
+nmap <C-p> :Files<cr>
 
 " File search
 nmap <C-p> :Files<cr>
@@ -186,6 +187,7 @@ let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 """ Couldn't figure out how to get this to trigger automatic completion. Using
 """ tab initiated completion for now.
 " let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
+" let g:neocomplete#sources#omni#input_patterns.rust = '[^.[:digit:] *\t]\%(\.\|\::\)\%(\h\w*\)\?'
 
 """ Autocompletion for elm
 call neocomplete#util#set_default_dictionary(
@@ -230,10 +232,8 @@ nmap <leader>t :TagbarToggle<CR>
 let g:AutoPairsCenterLine = 0
 
 """ Javascript
+" would prefer for this to be 1.
 let g:jsx_ext_required = 0
-
-""" CtrlP
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git|vendor'
 
 """ Elm
 let g:elm_format_autosave = 1
@@ -263,11 +263,18 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 """ Rust
 let g:rustfmt_autosave = 1
+set hidden " Not sure if I need this
+let g:racer_cmd = "~/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
+
+" Goto def for rust
+autocmd FileType rust nmap <leader>gd <Plug>(rust-def)
+autocmd FileType rust nmap <leader>gs <Plug>(rust-def-vertical)
 
 """ FZF
 let g:rg_command = '
   \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
   \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf}"
-  \ -g "!{.git,node_modules,vendor}/*" '
+  \ -g "!{.git,node_modules,vendor,.DS_Store}/*" '
 
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)

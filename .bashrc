@@ -23,7 +23,10 @@ alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappine
 #### GO STUFF ####
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN
+export PATH=$PATH:$GOBIN:$HOME/.cargo/bin
+
+#### RUST STUFF ####
+export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
 #### BECAUSE I'M LAZY ####
 alias gs="git status"
