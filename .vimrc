@@ -218,6 +218,11 @@ autocmd FileType go nmap <leader>i <Plug>(go-info)
 """ ALE
 let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_save = 1
+let g:ale_linters = {
+\	'go': ['gometalinter', 'gofmt'],
+\}
+
+let g:ale_go_gometalinter_options = '--fast'
 
 """ Statusline
 let g:airline_powerline_fonts = 1
