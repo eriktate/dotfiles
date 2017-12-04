@@ -13,7 +13,6 @@ Plugin 'tpope/vim-surround'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'fatih/vim-go'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'Shougo/neocomplete'
 Plugin 'bling/vim-airline'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
@@ -33,6 +32,21 @@ Plugin 'tikhomirov/vim-glsl'
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plugin 'junegunn/fzf.vim'
+Plugin 'alx741/vim-hindent'
+Plugin 'udalov/kotlin-vim'
+
+" Completion support
+if has('nvim')
+	Plugin 'Shougo/deoplete.nvim'
+	Plugin 'zchee/deoplete-go', {'do': 'make'}
+	Plugin 'neovimhaskell/haskell-vim'
+else
+	Plugin 'Shougo/deoplete.nvim'
+	Plugin 'zchee/deoplete-go', {'do': 'make'}
+	Plugin 'roxma/nvim-yarp'
+	Plugin 'roxma/vim-hug-neovim-rpc'
+endif
+
 Bundle 'morhetz/gruvbox'
 Bundle 'eriktate/vim-protobuf'
 
@@ -87,6 +101,7 @@ autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype elm setlocal ts=4 sts=4 sw=4 expandtab
+autocmd Filetype haskell setlocal ts=4 sts=4 sw=4 expandtab
 autocmd Filetype terraform setlocal commentstring=#%s
 
 """ Set language and encoding
@@ -151,57 +166,14 @@ set termguicolors
 au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
-""" Neocomplete
-let g:acp_enableAtStartup = 0
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#disable_auto_complete = 1
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
+""" Deocomplete
+let g:deoplete#enable_at_startup = 1
 
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-
-""" Enable tab completion
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
-	\ <SID>check_back_space() ? "\<TAB>" :
-	\ neocomplete#start_manual_complete()
-function! s:check_back_space() "{{{
-	let col = col('.') - 1
-	return !col || getline('.')[col - 1] =~ '\s'
-endfunction"}}}
-
-""" Enable heavy omnicompletion
-if !exists('g:neocomplete#sources#omni#input_patterns')
-	let g:neocomplete#sources#omni#input_patterns = {}
-endif
-
-let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
-let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-""" Couldn't figure out how to get this to trigger automatic completion. Using
-""" tab initiated completion for now.
-" let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
-" let g:neocomplete#sources#omni#input_patterns.rust = '[^.[:digit:] *\t]\%(\.\|\::\)\%(\h\w*\)\?'
-
-""" Autocompletion for elm
-call neocomplete#util#set_default_dictionary(
-  \ 'g:neocomplete#sources#omni#input_patterns',
-  \ 'elm',
-  \ '\.')
 
 """ Go Stuff
 let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 0
 let g:go_updatetime = 500
-
-"let g:go_metalinter_autosave = 1
-"let g:go_metalinter_autosave_enabled = ['golint', 'vet', 'gocyclo', 'errcheck']
 
 " Show references to the current token
 autocmd FileType go nmap gr <Plug>(go-referrers)
@@ -275,6 +247,12 @@ let g:racer_experimental_completer = 1
 " Goto def for rust
 autocmd FileType rust nmap <leader>gd <Plug>(rust-def)
 autocmd FileType rust nmap <leader>gs <Plug>(rust-def-vertical)
+
+""" Haskell
+let g:hindent_on_save = 1
+let g:hindent_indent_size = 4
+
+let g:haskell_indent_guard = 4
 
 """ FZF
 let g:rg_command = '

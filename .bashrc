@@ -20,20 +20,30 @@ alias startsteam="startx ~/.xinitrc steam"
 alias crankit="sudo cpupower frequency-set -g performance & sudo sysctl vm.swappiness=30"
 alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappiness=60"
 
+
+#### ENV VARS ####
+export EDITOR=nvim
+export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin
+
 #### GO STUFF ####
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN:$HOME/.cargo/bin
 
 #### RUST STUFF ####
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
 #### BECAUSE I'M LAZY ####
 alias gs="git status"
+alias vim="nvim"
 alias vimrc="vim ~/dotfiles/.vimrc"
 alias bashrc="vim ~/dotfiles/.bashrc"
 alias gowork="cd $GOPATH/src/github.com/eriktate"
 alias gogfx="cd ~/projects/learn-graphics"
+
+#### DOCKER ALIASES ####
+alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
+alias docker-rmi="sudo docker image rm \$(sudo docker image ls -aq)"
+
 # Add tab completion to git things
 if [ -f ~/git/contrib/completion/git-completion.bash ]; then
 	. ~/git/contrib/completion/git-completion.bash
