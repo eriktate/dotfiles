@@ -50,6 +50,8 @@ bindsym Mod1+d exec dmenu_run
 
 # run rofi program launcher
 bindsym Mod1+space exec rofi -show run
+bindsym Mod1+tab exec rofi -show window
+
 # change focus
 bindsym Mod1+$left focus left
 bindsym Mod1+$down focus down
