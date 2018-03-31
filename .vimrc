@@ -33,12 +33,14 @@ Plugin 'elixir-editors/vim-elixir'
 Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plugin 'junegunn/fzf.vim'
 Plugin 'alx741/vim-hindent'
+Plugin 'justinmk/vim-syntax-extra'
 Plugin 'udalov/kotlin-vim'
 
 " Completion support
 if has('nvim')
 	Plugin 'Shougo/deoplete.nvim'
 	Plugin 'zchee/deoplete-go', {'do': 'make'}
+	Plugin 'tweekmonster/deoplete-clang2'
 	Plugin 'neovimhaskell/haskell-vim'
 else
 	Plugin 'Shougo/deoplete.nvim'
@@ -74,7 +76,7 @@ set modelines=0
 set number
 set ruler
 set visualbell
-set wrap
+set wrap linebreak nolist
 set noshiftround
 set splitright
 set splitbelow
@@ -103,6 +105,9 @@ autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype elm setlocal ts=4 sts=4 sw=4 expandtab
 autocmd Filetype haskell setlocal ts=4 sts=4 sw=4 expandtab
 autocmd Filetype terraform setlocal commentstring=#%s
+autocmd Filetype c setlocal commentstring=//\ %s
+autocmd Filetype cpp setlocal commentstring=//\ %s
+autocmd Filetype glsl setlocal commentstring=//\ %s
 
 """ Set language and encoding
 set encoding=utf-8
@@ -157,7 +162,7 @@ let NERDTreeShowBookmarks = 1
 let NERDTreeChDirMode = 2
 
 """ Set colorscheme
-let g:gruvbox_contrast_dark = 'soft'
+let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
 set background=dark
 set termguicolors
@@ -192,7 +197,10 @@ let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_save = 1
 let g:ale_linters = {
 \	'go': ['gometalinter', 'gofmt'],
+\	'jsx': ['eslint']
 \}
+
+let g:ale_linter_aliases = {'jsx': 'css'}
 
 let g:ale_go_gometalinter_options = '--fast'
 
@@ -228,12 +236,14 @@ nmap <leader>df :Goyo<cr>
 
 """ Markdown
 autocmd BufEnter *.md exe 'noremap <F5> :!open -a "Google Chrome" %:p<CR>'
+autocmd BufEnter *.md exe ''
 
 """ HTML
 let g:html_indent_inctags = "main,p"
 
 """ C
 "let g:clang_library_path='/usr/lib/libclang.so.4.0'
+let g:deoplete#sources#clang#libclang_path='/usr/lib/libclang.so'
 
 """ GLSL
 autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl

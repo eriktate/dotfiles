@@ -23,7 +23,7 @@ alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappine
 
 #### ENV VARS ####
 export EDITOR=nvim
-export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin
+export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/
 
 #### GO STUFF ####
 export GOPATH=~/go
@@ -39,6 +39,8 @@ alias vimrc="vim ~/dotfiles/.vimrc"
 alias bashrc="vim ~/dotfiles/.bashrc"
 alias gowork="cd $GOPATH/src/github.com/eriktate"
 alias gogfx="cd ~/projects/learn-graphics"
+alias gocover="go test -covermode=count -coverprofile=coverage.out && go tool cover -html=coverage.out"
+alias gotest="go test -cover -v"
 
 #### DOCKER ALIASES ####
 alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
