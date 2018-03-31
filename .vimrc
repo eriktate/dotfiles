@@ -5,12 +5,13 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 
-Plugin 'scrooloose/nerdtree'
+" NerdTree plugins.
+" Plugin 'scrooloose/nerdtree'
+" Plugin 'Xuyuanp/nerdtree-git-plugin'
+
 Plugin 'w0rp/ale'
-Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-surround'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'fatih/vim-go'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'bling/vim-airline'
@@ -23,7 +24,6 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'ElmCast/elm-vim'
 Plugin 'hashivim/vim-terraform'
 Plugin 'junegunn/goyo.vim'
-Plugin 'kylef/apiblueprint.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'alvan/vim-closetag'
 Plugin 'rust-lang/rust.vim'
@@ -33,8 +33,8 @@ Plugin 'elixir-editors/vim-elixir'
 Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plugin 'junegunn/fzf.vim'
 Plugin 'alx741/vim-hindent'
+Plugin 'shiracamus/vim-syntax-x86-objdump-d'
 Plugin 'justinmk/vim-syntax-extra'
-Plugin 'udalov/kotlin-vim'
 
 " Completion support
 if has('nvim')
@@ -49,6 +49,7 @@ else
 	Plugin 'roxma/vim-hug-neovim-rpc'
 endif
 
+Plugin 'ajmwagar/vim-deus'
 Bundle 'morhetz/gruvbox'
 Bundle 'eriktate/vim-protobuf'
 
@@ -145,7 +146,6 @@ nnoremap k gk
 """ Change line style (rnu = relativenumber)
 nmap <leader>rl :set rnu<cr>
 nmap <leader>al :set nornu<cr>
-nmap <C-p> :Files<cr>
 
 " File search
 nmap <C-p> :Files<cr>
@@ -157,13 +157,21 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 """ NERDTree stuff
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowBookmarks = 1
-let NERDTreeChDirMode = 2
+" map <C-n> :NERDTreeToggle<CR>
+" let NERDTreeShowBookmarks = 1
+" let NERDTreeChDirMode = 2
 
-""" Set colorscheme
-let g:gruvbox_contrast_dark = 'hard'
+""" Gruvbox
+let g:gruvbox_contrast_dark = 'medium'
 colorscheme gruvbox
+
+""" Deus
+" set t_Co=256
+" let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+" let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" colorscheme deus
+" let g:deus_termcolors=256
+
 set background=dark
 set termguicolors
 
@@ -173,7 +181,17 @@ au BufReadPost Jenkinsfile set filetype=groovy
 
 """ Deocomplete
 let g:deoplete#enable_at_startup = 1
+" let g:deoplete#disable_auto_complete = 1
+let g:deoplete#auto_complete_delay = 147
 
+" Enable tab completion for de
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
+	\ <SID>check_back_space() ? "\<TAB>" :
+	\ deoplete#mappings#manual_complete()
+function! s:check_back_space() "{{{
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1] =~ '\s'
+endfunction"}}}
 
 """ Go Stuff
 let g:go_fmt_command = "goimports"
