@@ -35,11 +35,13 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'alx741/vim-hindent'
 Plugin 'shiracamus/vim-syntax-x86-objdump-d'
 Plugin 'justinmk/vim-syntax-extra'
+Plugin 'takac/vim-hardtime'
 
 " Completion support
 if has('nvim')
 	Plugin 'Shougo/deoplete.nvim'
 	Plugin 'zchee/deoplete-go', {'do': 'make'}
+	Plugin 'zchee/deoplete-jedi'
 	Plugin 'tweekmonster/deoplete-clang2'
 	Plugin 'neovimhaskell/haskell-vim'
 else
@@ -49,7 +51,7 @@ else
 	Plugin 'roxma/vim-hug-neovim-rpc'
 endif
 
-Plugin 'ajmwagar/vim-deus'
+" Plugin 'ajmwagar/vim-deus'
 Bundle 'morhetz/gruvbox'
 Bundle 'eriktate/vim-protobuf'
 
@@ -69,7 +71,6 @@ if has("gui_running")
 	set mouse=
 endif
 
-""" NATIVE VIM CONFIGS
 set nocompatible
 syntax on
 filetype plugin indent on
@@ -102,6 +103,7 @@ set noexpandtab
 """ Filetype settings
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype elm setlocal ts=4 sts=4 sw=4 expandtab
 autocmd Filetype haskell setlocal ts=4 sts=4 sw=4 expandtab
@@ -117,7 +119,7 @@ set langmenu=en
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
-""" Map esc to jk
+""" Preferred escape
 imap jk <Esc>
 
 """ Map <leader> to ','
@@ -184,7 +186,7 @@ let g:deoplete#enable_at_startup = 1
 " let g:deoplete#disable_auto_complete = 1
 let g:deoplete#auto_complete_delay = 147
 
-" Enable tab completion for de
+" Enable tab completion for deoplete
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
 	\ <SID>check_back_space() ? "\<TAB>" :
 	\ deoplete#mappings#manual_complete()
@@ -227,6 +229,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 set laststatus=2
+set noshowmode
 
 """ Tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -264,7 +267,7 @@ let g:html_indent_inctags = "main,p"
 let g:deoplete#sources#clang#libclang_path='/usr/lib/libclang.so'
 
 """ GLSL
-autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
+autocmd! BufNewFile,BufRead *.vs,*.fs,*.vertex,*.fragment set ft=glsl
 
 """ Rust
 let g:rustfmt_autosave = 1
@@ -282,10 +285,28 @@ let g:hindent_indent_size = 4
 
 let g:haskell_indent_guard = 4
 
+""" Binary/Hex
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %!xxd -r
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+
+""" NASM
+au BufRead,BufNewFile *.asm set filetype=nasm
+
 """ FZF
 let g:rg_command = '
   \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf}"
-  \ -g "!{.git,node_modules,vendor,.DS_Store}/*" '
+  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf,tf,yml}"
+  \ -g "!{.git,node_modules,vendor,.DS_Store,target}/*" '
 
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
+
+""" Hardtime
+" let g:hardtime_default_on = 1

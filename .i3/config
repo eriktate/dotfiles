@@ -50,6 +50,7 @@ bindsym Mod1+d exec dmenu_run
 
 # run rofi program launcher
 bindsym Mod1+space exec rofi -show run
+bindsym Mod1+Tab exec rofi -show window
 # change focus
 bindsym Mod1+$left focus left
 bindsym Mod1+$down focus down
@@ -77,15 +78,15 @@ bindsym Mod1+Shift+Right move right
 bindsym $mod+Shift+v split h
 
 # split in vertical orientation
-bindsym Mod1+v split v
+bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
-bindsym Mod1+f fullscreen toggle
+bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym Mod1+s layout stacking
-bindsym Mod1+w layout tabbed
-bindsym Mod1+e layout toggle split
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
 # Had to comment this out for now because it breaks the i3 config
@@ -166,28 +167,29 @@ mode "resize" {
 bindsym Mod1+r mode "resize"
 
 ### Gap config
-# gaps inner 8
-# gaps outer 12
+# gaps inner 4
+# gaps outer 8
 
 ### Set window borders
 new_window pixel 2
 new_float pixel 2
 smart_borders on
-for_window [class="^.*"] border pixel 1
+for_window [class="^.*"] border pixel 2
+client.focused #d79921 #d79921 #d79921
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-    status_command ~/.scripts/conky-i3bar
-    position top
-    font pango: Misc Tamsyn, Wuncon Siji 11
-    height 24
-    colors {
-        background #282828
-        inactive_workspace #282828 #282828 #928374
-        focused_workspace #d79921 #d79921 #282828
-    }
-}
+# bar {
+#     status_command ~/dotfiles/.scripts/conky-i3bar
+#     position bottom
+#     font pango: Misc Tamsyn, Wuncon Siji 11
+#     height 24
+#     colors {
+#         background #282828
+#         inactive_workspace #282828 #282828 #928374
+#         focused_workspace #d79921 #d79921 #282828
+#     }
+# }
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a
@@ -215,6 +217,28 @@ bindsym $mod+Shift+1 move container to workspace $tag1
 bindsym $mod+Shift+2 move container to workspace $tag2
 bindsym $mod+Shift+3 move container to workspace $tag3
 
+bindsym $mod+m move workspace to output left
+
+# Force floating for steam windows
+# https://github.com/ValveSoftware/steam-for-linux/issues/1040
+for_window [class="^Steam$" title="^Friends$"] floating enable
+for_window [class="^Steam$" title="Steam - News"] floating enable
+for_window [class="^Steam$" title=".* - Chat"] floating enable
+for_window [class="^Steam$" title="^Settings$"] floating enable
+for_window [class="^Steam$" title=".* - event started"] floating enable
+for_window [class="^Steam$" title=".* CD key"] floating enable
+for_window [class="^Steam$" title="^Steam - Self Updater$"] floating enable
+for_window [class="^Steam$" title="^Screenshot Uploader$"] floating enable
+for_window [class="^Steam$" title="^Steam Guard - Computer Authorization Required$"] floating enable
+for_window [title="^Steam Keyboard$"] floating enable
+for_window [title=".* - floatee"] floating enable
+
 # Startup scripts
-exec compton -b
+exec allow_rgb10_configs=false compton -b --unredir-if-possible
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec ~/.fehbg &
+
+# Fix monitor order
+exec xrandr --output DVI-I-1 --left-of HDMI-1
+# Set mouse natural scrolling.
+exec xinput set-prop 10 278 1

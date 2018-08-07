@@ -1,0 +1,36 @@
+Arguments: 
+  /home/eriktate/.nvm/versions/node/v9.10.1/bin/node /home/eriktate/.nvm/versions/node/v9.10.1/bin/yarn add -g create-elm-app
+
+PATH: 
+  /home/eriktate/.nvm/versions/node/v9.10.1/bin:/home/eriktate/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/eriktate/.vim/bundle/fzf/bin::/home/eriktate/.cargo/bin:/usr/local/bin:/home/eriktate/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:/home/eriktate/apps/protoc/bin/:/home/eriktate/.rvm/bin:/home/eriktate/go/bin:/home/eriktate/.cargo/bin:/usr/local/bin:/home/eriktate/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:/home/eriktate/apps/protoc/bin/:/home/eriktate/.rvm/bin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  9.10.1
+
+Platform: 
+  linux x64
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Missing list of packages to add to your project.
+      at new MessageError (/home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:186:110)
+      at Object.<anonymous> (/home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:40587:13)
+      at Generator.next (<anonymous>)
+      at step (/home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:23451:28)
+      at Object.<anonymous> (/home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:95:12)
+      at Object.run (/home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:40599:19)
+      at run (/home/eriktate/.nvm/versions/node/v9.10.1/lib/node_modules/yarn/lib/cli.js:89113:20)
