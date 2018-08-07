@@ -35,6 +35,7 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'alx741/vim-hindent'
 Plugin 'shiracamus/vim-syntax-x86-objdump-d'
 Plugin 'justinmk/vim-syntax-extra'
+Plugin 'takac/vim-hardtime'
 
 " Completion support
 if has('nvim')
@@ -101,6 +102,7 @@ set noexpandtab
 """ Filetype settings
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype elm setlocal ts=4 sts=4 sw=4 expandtab
 autocmd Filetype haskell setlocal ts=4 sts=4 sw=4 expandtab
@@ -274,10 +276,25 @@ let g:hindent_indent_size = 4
 
 let g:haskell_indent_guard = 4
 
+""" Binary/Hex
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %!xxd -r
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+
 """ FZF
 let g:rg_command = '
   \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf}"
+  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf,tf,yml}"
   \ -g "!{.git,node_modules,vendor,.DS_Store}/*" '
 
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
+
+""" Hardtime
+" let g:hardtime_default_on = 1
