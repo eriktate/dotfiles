@@ -1,9 +1,14 @@
 [options]
-font = Monofur for Powerline, Wuncon Siji 12
+# font = Monofur for Powerline, Wuncon Siji 12
+# font = Monofur for Powerline, Wuncon Siji 16
+font = Monofur for Powerline, Wuncon Siji 14
 
 # Gruvbox theme
 [colors]
-background = rgba(40, 40, 40, .8)
+# Transparent background
+# background = rgba(40, 40, 40, .8)
+
+background = rgba(40, 40, 40, 1.0)
 
 foreground = #ebdbb2
 foreground = #ebdbb2
