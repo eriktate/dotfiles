@@ -1,2 +1,8 @@
 # But ignore swp...
 *.swp
+
+.config/*
+!.config/nvim
+!.config/polybar
+!.config/rofi
+!.config/termite

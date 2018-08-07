@@ -1,0 +1,11 @@
+# Increase volume
+"amixer set Master 5%+"
+Alt+Mod2 + Prior
+
+# Decrease volume
+"amixer set Master 5%-"
+Alt+Mod2 + Next
+
+# Mute volume
+"amixer set Master toggle"
+Alt+Mod2 + Pause

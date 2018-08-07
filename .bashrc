@@ -5,6 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Make sure ssh-agent is running
+eval $(ssh-agent) > /dev/null 2>&1
+
 # Load fzf config if present
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules,vendor}" 2> /dev/null'
@@ -20,10 +23,14 @@ alias startsteam="startx ~/.xinitrc steam"
 alias crankit="sudo cpupower frequency-set -g performance & sudo sysctl vm.swappiness=30"
 alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappiness=60"
 
+# Aliases for OS dev
+alias qemu='qemu-system-x86_64'
+
 
 #### ENV VARS ####
 export EDITOR=nvim
-export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/
+export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin
+export LINODE_API_KEY=a6b45dab7efc90a36c42a505302b412efa975b4cc59cc88832deef990dd1dee3
 
 #### GO STUFF ####
 export GOPATH=~/go
@@ -39,6 +46,7 @@ alias vimrc="vim ~/dotfiles/.vimrc"
 alias bashrc="vim ~/dotfiles/.bashrc"
 alias gowork="cd $GOPATH/src/github.com/eriktate"
 alias gogfx="cd ~/projects/learn-graphics"
+alias golingo="cd $GOPATH/src/github.com/eriktate/lingo"
 alias gocover="go test -covermode=count -coverprofile=coverage.out && go tool cover -html=coverage.out"
 alias gotest="go test -cover -v"
 
@@ -47,8 +55,8 @@ alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
 alias docker-rmi="sudo docker image rm \$(sudo docker image ls -aq)"
 
 # Add tab completion to git things
-if [ -f ~/git/contrib/completion/git-completion.bash ]; then
-	. ~/git/contrib/completion/git-completion.bash
+if [ -f ~/dotfiles/git-completion.bash ]; then
+	. ~/dotfiles/git-completion.bash
 fi
 
 
@@ -63,7 +71,7 @@ PURPLE="$(tput setaf 5)"
 LIGHT="$(tput setaf 7)"
 
 # Access to git branch information.
-source ~/git/contrib/completion/git-prompt.sh
+source ~/dotfiles/git-prompt.sh
 
 export PS1='${BLUE}\u@\h${RESET}[\t]${RESET}:${YELLOW}[\w]${GREEN}$(__git_ps1)${RESET}\n\\$ '
 
