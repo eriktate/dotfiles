@@ -6,11 +6,17 @@
 [[ $- != *i* ]] && return
 
 # Make sure ssh-agent is running
-eval $(ssh-agent) > /dev/null 2>&1
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh-agent-thing
+fi
+
+if [[ ! "$SSH_AUTH_SOCK" ]]; then
+    eval "$(<~/.ssh-agent-thing)"
+fi
 
 # Load fzf config if present
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules,vendor}" 2> /dev/null'
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules,vendor,target,*.bs.js}" 2> /dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bind -x '"\C-p": vim $(fzf);'
 
@@ -29,7 +35,8 @@ alias qemu='qemu-system-x86_64'
 
 #### ENV VARS ####
 export EDITOR=nvim
-export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin
+export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin
+export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin
 export LINODE_API_KEY=a6b45dab7efc90a36c42a505302b412efa975b4cc59cc88832deef990dd1dee3
 
 #### GO STUFF ####
@@ -47,8 +54,10 @@ alias bashrc="vim ~/dotfiles/.bashrc"
 alias gowork="cd $GOPATH/src/github.com/eriktate"
 alias gogfx="cd ~/projects/learn-graphics"
 alias golingo="cd $GOPATH/src/github.com/eriktate/lingo"
-alias gocover="go test -covermode=count -coverprofile=coverage.out && go tool cover -html=coverage.out"
+alias gocover="go test -covermode=count -coverprofile=coverage.out ./... && go tool cover -html=coverage.out"
 alias gotest="go test -cover -v"
+alias gofulltest="go test -v -cover -covermode=count -coverprofile=.coverage.out ./... && go tool cover -func .coverage.out | grep total: | awk '{printf \"total code coverage: %s\\n\", \$3}' && go tool cover -html=.coverage.out -o coverage.html"
+alias glint="golangci-lint run"
 
 #### DOCKER ALIASES ####
 alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
@@ -88,4 +97,8 @@ export INKWELL_BLOGS_BUCKET="inkwell-test"
 export CPATH="./include:./lib"
 
 source ~/.awsrc
-source ~/aur/nvm/init-nvm.sh
+alias aws-et="export AWS_SECRET_ACCESS_KEY=${ET_SECRET_KEY} && export AWS_ACCESS_KEY_ID=${ET_ACCESS_KEY}"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

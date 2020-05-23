@@ -5,10 +5,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 
-" NerdTree plugins.
-" Plugin 'scrooloose/nerdtree'
-" Plugin 'Xuyuanp/nerdtree-git-plugin'
-
+Plugin 'VundleVim/Vundle.vim'
 Plugin 'w0rp/ale'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-surround'
@@ -36,20 +33,23 @@ Plugin 'alx741/vim-hindent'
 Plugin 'shiracamus/vim-syntax-x86-objdump-d'
 Plugin 'justinmk/vim-syntax-extra'
 Plugin 'takac/vim-hardtime'
+Plugin 'eriktate/zig.vim'
+Plugin 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plugin 'diepm/vim-rest-console'
+Plugin 'tpope/vim-dadbod'
+Plugin 'reasonml-editor/vim-reason-plus'
 
 " Completion support
-if has('nvim')
-	Plugin 'Shougo/deoplete.nvim'
-	Plugin 'zchee/deoplete-go', {'do': 'make'}
-	Plugin 'zchee/deoplete-jedi'
-	Plugin 'tweekmonster/deoplete-clang2'
-	Plugin 'neovimhaskell/haskell-vim'
-else
-	Plugin 'Shougo/deoplete.nvim'
-	Plugin 'zchee/deoplete-go', {'do': 'make'}
-	Plugin 'roxma/nvim-yarp'
-	Plugin 'roxma/vim-hug-neovim-rpc'
-endif
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'autozimu/LanguageClient-neovim', {
+	\ 'branch': 'next',
+	\ 'do': 'bash install.sh',
+	\ }
+" Plugin 'zchee/deoplete-go', {'do': 'make'}
+Plugin 'zchee/deoplete-jedi'
+" Plugin 'tweekmonster/deoplete-clang2'
+Plugin 'deoplete-plugins/deoplete-clang'
+Plugin 'neovimhaskell/haskell-vim'
 
 " Plugin 'ajmwagar/vim-deus'
 Bundle 'morhetz/gruvbox'
@@ -103,6 +103,9 @@ set noexpandtab
 """ Filetype settings
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype reason setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype css setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype scss setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype elm setlocal ts=4 sts=4 sw=4 expandtab
@@ -111,6 +114,7 @@ autocmd Filetype terraform setlocal commentstring=#%s
 autocmd Filetype c setlocal commentstring=//\ %s
 autocmd Filetype cpp setlocal commentstring=//\ %s
 autocmd Filetype glsl setlocal commentstring=//\ %s
+autocmd Filetype reason setlocal commentstring=//\ %s
 
 """ Set language and encoding
 set encoding=utf-8
@@ -195,10 +199,22 @@ function! s:check_back_space() "{{{
 	return !col || getline('.')[col - 1] =~ '\s'
 endfunction"}}}
 
+" Launch gopls when Go files are in use
+let g:LanguageClient_serverCommands = {
+	\ 'go': ['gopls'],
+	\ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+	\ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+	\ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+	\ 'python': ['/usr/local/bin/pyls'],
+	\ 'reason': ['/usr/bin/reason-language-server'],
+	\ }
+
 """ Go Stuff
 let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 0
 let g:go_updatetime = 500
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 " Show references to the current token
 autocmd FileType go nmap gr <Plug>(go-referrers)
@@ -216,13 +232,13 @@ autocmd FileType go nmap <leader>i <Plug>(go-info)
 let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_save = 1
 let g:ale_linters = {
-\	'go': ['gometalinter', 'gofmt'],
+\	'go': ['gopls', 'gofmt'],
 \	'jsx': ['eslint']
 \}
 
 let g:ale_linter_aliases = {'jsx': 'css'}
-
-let g:ale_go_gometalinter_options = '--fast'
+let g:ale_go_golangci_lint_options = ''
+let g:ale_go_golangci_lint_package = 1
 
 """ Statusline
 let g:airline_powerline_fonts = 1
@@ -303,10 +319,27 @@ au BufRead,BufNewFile *.asm set filetype=nasm
 """ FZF
 let g:rg_command = '
   \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
-  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf,tf,yml}"
-  \ -g "!{.git,node_modules,vendor,.DS_Store,target}/*" '
+  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf,tf,yml,ts,vim,re}"
+  \ -g "!{.git,node_modules,vendor,.DS_Store,target,}/*"
+  \ -g "!*.{bs.js}" '
 
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
+
+""" VRC
+let g:vrc_curl_opts = {
+  \ '--connect-timeout' : 10,
+  \ '-b': '/path/to/cookie',
+  \ '-c': '/path/to/cookie',
+  \ '-L': '',
+  \ '-i': '',
+  \ '--max-time': 60,
+  \ '--ipv4': '',
+  \ '-k': '',
+  \ '-s': '',
+\}
+
+""" Reason format on save
+autocmd BufWritePre *.re :call LanguageClient#textDocument_formatting_sync()
 
 """ Hardtime
 " let g:hardtime_default_on = 1
