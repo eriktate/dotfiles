@@ -16,7 +16,7 @@ fi
 
 # Load fzf config if present
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules,vendor,target,*.bs.js}" 2> /dev/null'
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules,vendor,target,*.bs.js,zig-cache}" 2> /dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bind -x '"\C-p": vim $(fzf);'
 
@@ -33,15 +33,16 @@ alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappine
 alias qemu='qemu-system-x86_64'
 
 
-#### ENV VARS ####
-export EDITOR=nvim
-export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin
-export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin
-export LINODE_API_KEY=a6b45dab7efc90a36c42a505302b412efa975b4cc59cc88832deef990dd1dee3
-
 #### GO STUFF ####
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
+
+#### ENV VARS ####
+export EDITOR=nvim
+export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin:/usr/local/janet:/usr/lib/zig/0.8.0
+export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin
+export LINODE_API_KEY=a6b45dab7efc90a36c42a505302b412efa975b4cc59cc88832deef990dd1dee3
+
 
 #### RUST STUFF ####
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
@@ -96,9 +97,12 @@ export INKWELL_BLOGS_TABLE="blogs"
 export INKWELL_BLOGS_BUCKET="inkwell-test"
 export CPATH="./include:./lib"
 
-source ~/.awsrc
+# source ~/.awsrc
 alias aws-et="export AWS_SECRET_ACCESS_KEY=${ET_SECRET_KEY} && export AWS_ACCESS_KEY_ID=${ET_ACCESS_KEY}"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# init pyenv
+eval "$(pyenv init -)"
