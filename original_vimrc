@@ -1,4 +1,4 @@
-set nocompatible
+c"" START PLUGIN CONFIGS
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -6,54 +6,73 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-" Language and Syntax Support
-Plugin 'fatih/vim-go'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
-Plugin 'ElmCast/elm-vim'
-Plugin 'hashivim/vim-terraform'
-Plugin 'rust-lang/rust.vim'
-Plugin 'tikhomirov/vim-glsl'
-Plugin 'shiracamus/vim-syntax-x86-objdump-d'
-" Plugin 'eriktate/zig.vim'
-Plugin 'ziglang/zig.vim'
-Plugin 'eriktate/vim-syntax-extra'
-Plugin 'eriktate/vim-svelte'
-Plugin 'eriktate/vim-protobuf'
-Plugin 'reasonml-editor/vim-reason-plus'
-Plugin 'cespare/vim-toml'
-Plugin 'elixir-editors/vim-elixir'
-
-" Tooling and Completions
-Plugin 'dense-analysis/ale'
-Plugin 'racer-rust/vim-racer'
-Plugin 'prettier/vim-prettier', { 'do': 'yarn install' }
-Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-Plugin 'junegunn/fzf.vim'
-Plugin 'diepm/vim-rest-console'
-Plugin 'majutsushi/tagbar'
-Plugin 'neoclide/coc.nvim', { 'branch': 'release' }
-" Plugin 'Shougo/deoplete.nvim'
-" Plugin 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
-" Plugin 'zchee/deoplete-jedi'
-" Plugin 'deoplete-plugins/deoplete-clang'
-
-" Editing Extensions
+Plugin 'w0rp/ale'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-surround'
+Plugin 'fatih/vim-go'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'bling/vim-airline'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'majutsushi/tagbar'
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'ElmCast/elm-vim'
+Plugin 'hashivim/vim-terraform'
 Plugin 'junegunn/goyo.vim'
+Plugin 'cespare/vim-toml'
 Plugin 'alvan/vim-closetag'
+Plugin 'rust-lang/rust.vim'
+Plugin 'racer-rust/vim-racer'
+Plugin 'tikhomirov/vim-glsl'
+Plugin 'elixir-editors/vim-elixir'
+Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plugin 'junegunn/fzf.vim'
+Plugin 'alx741/vim-hindent'
+Plugin 'shiracamus/vim-syntax-x86-objdump-d'
+Plugin 'eriktate/vim-syntax-extra'
+Plugin 'takac/vim-hardtime'
+Plugin 'eriktate/zig.vim'
+Plugin 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plugin 'diepm/vim-rest-console'
+Plugin 'tpope/vim-dadbod'
+Plugin 'reasonml-editor/vim-reason-plus'
 
-" Themes
-Plugin 'morhetz/gruvbox'
+" Completion support
+Plugin 'Shougo/deoplete.nvim'
+" Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+Plugin 'autozimu/LanguageClient-neovim', {
+	\ 'branch': 'next',
+	\ 'do': 'bash install.sh',
+	\ }
+" Plugin 'zchee/deoplete-go', {'do': 'make'}
+Plugin 'zchee/deoplete-jedi'
+" Plugin 'tweekmonster/deoplete-clang2'
+Plugin 'deoplete-plugins/deoplete-clang'
+Plugin 'neovimhaskell/haskell-vim'
+
+" Plugin 'ajmwagar/vim-deus'
+Bundle 'morhetz/gruvbox'
+Bundle 'eriktate/vim-protobuf'
 
 call vundle#end()
 
+""" GUI CONFIGS
+if has("gui_running")
+	set guifont=monofur_for_Powerline:h11
+	" Hide menubar
+	set guioptions -=m
+	" Hide right scroll
+	set guioptions -=r
+	" Hide left scroll
+	set guioptions -=L
+	" Hide toolbar
+	set guioptions -=T
+	set mouse=
+endif
+
+set nocompatible
 syntax on
 filetype plugin indent on
 set modelines=0
@@ -85,19 +104,18 @@ set noexpandtab
 """ Filetype settings
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
-autocmd Filetype typescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype reason setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype css setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype scss setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype elm setlocal ts=4 sts=4 sw=4 expandtab
+autocmd Filetype haskell setlocal ts=4 sts=4 sw=4 expandtab
 autocmd Filetype terraform setlocal commentstring=#%s
 autocmd Filetype c setlocal commentstring=//\ %s
 autocmd Filetype cpp setlocal commentstring=//\ %s
 autocmd Filetype glsl setlocal commentstring=//\ %s
 autocmd Filetype reason setlocal commentstring=//\ %s
-autocmd FileType svelte setlocal formatoptions+=ro commentstring=//\ %s
 
 """ Set language and encoding
 set encoding=utf-8
@@ -154,6 +172,13 @@ map <C-l> <C-W>l
 let g:gruvbox_contrast_dark = 'medium'
 colorscheme gruvbox
 
+""" Deus
+" set t_Co=256
+" let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+" let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" colorscheme deus
+" let g:deus_termcolors=256
+
 set background=dark
 set termguicolors
 
@@ -161,33 +186,19 @@ set termguicolors
 au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
-""" Deoplete
-" let g:deoplete#enable_at_startup = 1
+""" Deocomplete
+let g:deoplete#enable_at_startup = 1
 " let g:deoplete#disable_auto_complete = 1
 " let g:deoplete#auto_complete_delay = 147
 
 " Enable tab completion for deoplete
-" inoremap <expr><TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
-" function! s:check_back_space() "{{{
-" 	let col = col('.') - 1
-" 	return !col || getline('.')[col - 1] =~ '\s'
-" endfunction"}}}
-
-""" CoC
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
+	\ <SID>check_back_space() ? "\<TAB>" :
+	\ deoplete#mappings#manual_complete()
+function! s:check_back_space() "{{{
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1] =~ '\s'
+endfunction"}}}
 
 " Launch gopls when Go files are in use
 let g:LanguageClient_serverCommands = {
@@ -222,10 +233,9 @@ autocmd FileType go nmap <leader>i <Plug>(go-info)
 let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_save = 1
 let g:ale_linters = {
-	\ 'go': ['gopls', 'gofmt', 'golangci-lint'],
-	\ 'jsx': ['eslint'],
-	\ 'svelte': ['svelte-check'],
-	\ }
+\	'go': ['gopls', 'gofmt'],
+\	'jsx': ['eslint']
+\}
 
 let g:ale_linter_aliases = {'jsx': 'css'}
 let g:ale_go_golangci_lint_options = ''
@@ -270,7 +280,9 @@ autocmd BufEnter *.md exe ''
 let g:html_indent_inctags = "main,p"
 
 """ C
-" let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-10/lib/libclang.so'
+"let g:clang_library_path='/usr/lib/libclang.so.4.0'
+" let g:deoplete#sources#clang#libclang_path='/usr/lib/libclang.so'
+let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-10/lib/libclang.so'
 
 """ GLSL
 autocmd! BufNewFile,BufRead *.vs,*.fs,*.vertex,*.fragment set ft=glsl
@@ -307,22 +319,29 @@ augroup END
 au BufRead,BufNewFile *.asm set filetype=nasm
 
 """ FZF
-let g:rg_command = ' rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always" -g "*.{js,json,md,html,config,py,cpp,c,cs,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf,tf,yml,ts,vim,re,svelte}" -g "!{.git,node_modules,vendor,.DS_Store,target,build,obj}" -g "!*.{bs.js}" '
+let g:rg_command = '
+  \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
+  \ -g "*.{js,json,md,html,config,py,cpp,c,h,hpp,rs,elm,jsx,toml,go,hs,rb,conf,tf,yml,ts,vim,re}"
+  \ -g "!{.git,node_modules,vendor,.DS_Store,target,}/*"
+  \ -g "!*.{bs.js}" '
 
 command! -bang -nargs=* F call fzf#vim#grep(g:rg_command .shellescape(<q-args>), 1, <bang>0)
 
 """ VRC
-let g:vrc_curl_opts = { '--connect-timeout' : 10, '-b': '/path/to/cookie', '-c': '/path/to/cookie', '-L': '', '-i': '', '--max-time': 60, '--ipv4': '', '-k': '', '-s': '',}
+let g:vrc_curl_opts = {
+  \ '--connect-timeout' : 10,
+  \ '-b': '/path/to/cookie',
+  \ '-c': '/path/to/cookie',
+  \ '-L': '',
+  \ '-i': '',
+  \ '--max-time': 60,
+  \ '--ipv4': '',
+  \ '-k': '',
+  \ '-s': '',
+\}
 
 """ Reason format on save
 autocmd BufWritePre *.re :call LanguageClient#textDocument_formatting_sync()
 
-" let g:svelte_preprocessors = ['typescript', 'scss']
-
-""" Svelte
-let g:svelte_preprocessor_tags = [
-  \ { 'name': 'ts', 'tag': 'script', 'as': 'typescript' }
-  \ ]
-
-let g:svelte_preprocessors = ['ts', 'scss', 'sass']
-
+""" Hardtime
+" let g:hardtime_default_on = 1
