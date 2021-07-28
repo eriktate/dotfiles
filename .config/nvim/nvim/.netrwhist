@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/home/erik/projects/benchwarmer/benchmarks'
+let g:netrw_dirhist_2='/home/erik/projects/benchwarmer/.git'
+let g:netrw_dirhist_1='/home/erik/projects/docshelf/.git'

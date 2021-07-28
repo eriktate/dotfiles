@@ -32,10 +32,11 @@ Plugin 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plugin 'junegunn/fzf.vim'
 Plugin 'diepm/vim-rest-console'
 Plugin 'majutsushi/tagbar'
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
-Plugin 'zchee/deoplete-jedi'
-Plugin 'deoplete-plugins/deoplete-clang'
+Plugin 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plugin 'Shougo/deoplete.nvim'
+" Plugin 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+" Plugin 'zchee/deoplete-jedi'
+" Plugin 'deoplete-plugins/deoplete-clang'
 
 " Editing Extensions
 Plugin 'tpope/vim-commentary'
@@ -160,17 +161,33 @@ set termguicolors
 au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
-""" Deocomplete
-let g:deoplete#enable_at_startup = 1
+""" Deoplete
+" let g:deoplete#enable_at_startup = 1
 " let g:deoplete#disable_auto_complete = 1
 " let g:deoplete#auto_complete_delay = 147
 
 " Enable tab completion for deoplete
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
-function! s:check_back_space() "{{{
-	let col = col('.') - 1
-	return !col || getline('.')[col - 1] =~ '\s'
-endfunction"}}}
+" inoremap <expr><TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
+" function! s:check_back_space() "{{{
+" 	let col = col('.') - 1
+" 	return !col || getline('.')[col - 1] =~ '\s'
+" endfunction"}}}
+
+""" CoC
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " Launch gopls when Go files are in use
 let g:LanguageClient_serverCommands = {
@@ -253,7 +270,7 @@ autocmd BufEnter *.md exe ''
 let g:html_indent_inctags = "main,p"
 
 """ C
-let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-10/lib/libclang.so'
+" let g:deoplete#sources#clang#libclang_path='/usr/lib/llvm-10/lib/libclang.so'
 
 """ GLSL
 autocmd! BufNewFile,BufRead *.vs,*.fs,*.vertex,*.fragment set ft=glsl
