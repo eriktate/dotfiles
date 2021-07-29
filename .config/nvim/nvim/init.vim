@@ -11,10 +11,8 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'jiangmiao/auto-pairs'
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'branch': 'release/0.x'
-  \ }
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 """ Language plugins
 Plug 'fatih/vim-go'
@@ -26,12 +24,13 @@ Plug 'ziglang/zig.vim'
 Plug 'cespare/vim-toml'
 Plug 'elm-tooling/elm-vim'
 Plug 'rescript-lang/vim-rescript'
-Plug 'eriktate/vim-syntax-extra'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'jparise/vim-graphql'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'mxw/vim-jsx'
+Plug 'eriktate/vim-protobuf'
+Plug 'eriktate/vim-syntax-extra'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
@@ -66,6 +65,7 @@ set listchars=tab:▸\ ,eol:¬,trail:-,extends:>,precedes:<,nbsp:+
 set sessionoptions-=options
 set viewoptions-=options
 set whichwrap+=<,>,h,l
+set linebreak
 set splitright
 set splitbelow
 
@@ -126,3 +126,24 @@ autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 
 """ CoC settings
 let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+""" ALE settings
+" jump to next lint error
+nmap <silent> <C-e> <Plug>(ale_next_wrap)
+
+""" Telescope settings
+command F Telescope live_grep
