@@ -12,6 +12,5 @@
 			"rootPatterns": ["bsconfig.json"]
 		}
 	},
-	"coc.preferences.formatOnSaveFiletypes": ["rescript", "javascript", "rust", "go", "typescript", "typescriptreact", "zig"],
-	"codeLens.enable": false
+	"coc.preferences.formatOnSaveFiletypes": ["rescript", "javascript", "rust", "go", "typescript", "typescriptreact", "zig", "svelte", "scss"]
 }

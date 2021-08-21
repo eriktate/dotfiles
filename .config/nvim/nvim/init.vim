@@ -31,6 +31,7 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'mxw/vim-jsx'
 Plug 'eriktate/vim-protobuf'
 Plug 'eriktate/vim-syntax-extra'
+Plug 'evanleck/vim-svelte'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
@@ -121,6 +122,7 @@ autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript.tsx setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescriptreact setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype svelte setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype rescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 
@@ -147,3 +149,9 @@ nmap <silent> <C-e> <Plug>(ale_next_wrap)
 
 """ Telescope settings
 command F Telescope live_grep
+
+""" vim-svelte
+let g:svelte_preprocessor_tags = [
+	\ { 'name': 'ts', 'tag': 'script', 'as': 'typescript' }
+	\ ]
+let g:svelte_preprocessors = ['ts']
