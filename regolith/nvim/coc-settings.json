@@ -1,7 +1,7 @@
 {
 	"languageserver": {
 		"zls": {
-			"command": "~/zls/zig-out/bin/zls",
+			"command": "~/zls/zls",
 			"filetypes": ["zig"]
 		},
 		"rescript": {

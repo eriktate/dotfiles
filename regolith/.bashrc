@@ -39,8 +39,9 @@ export GOBIN=$GOPATH/bin
 
 #### ENV VARS ####
 export EDITOR=nvim
+export NVIM_PATH=/usr/local/nvim
 export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin:/usr/local/janet:/usr/lib/zig/0.8.0
-export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin
+export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin
 
 
 #### RUST STUFF ####

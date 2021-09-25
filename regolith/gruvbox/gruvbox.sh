@@ -17,7 +17,7 @@ foreground="#d5c4a1" # fg2
 color03="#d79921";color11="#fabd2f" # Yellow
 #color03="#d65d0e";color11="#fe8019" # Orange
 
-dconf load /org/pantheon/terminal/settings/ <<COLORS
+dconf load /org/gnome/terminal/legacy/profiles:$(uuidgen)/ <<COLORS
 [/]
 name='Gruvbox Dark'
 cursor-color='${foreground}'
