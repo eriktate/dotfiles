@@ -1,0 +1,16 @@
+{
+	"languageserver": {
+		"zls": {
+			"command": "~/zls/zls",
+			"filetypes": ["zig"]
+		},
+		"rescript": {
+			"enable": true,
+			"module": "~/.vim/plugged/vim-rescript/server/out/server.js",
+			"args": ["--node-ipc"],
+			"filetypes": ["rescript"],
+			"rootPatterns": ["bsconfig.json"]
+		}
+	},
+	"coc.preferences.formatOnSaveFiletypes": ["rescript", "javascript", "rust", "go", "typescript", "typescriptreact", "zig", "svelte", "scss"]
+}

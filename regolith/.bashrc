@@ -32,16 +32,15 @@ alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappine
 # Aliases for OS dev
 alias qemu='qemu-system-x86_64'
 
-#### LANG STUFF ####
+
+#### GO STUFF ####
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
-export ZIGPATH=/usr/local/zig
-export ZIGBIN=$ZIGPATH/bin
 
 #### ENV VARS ####
 export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
-export PATH=$PATH:$GOBIN:$ZIGBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin:/usr/local/janet:/usr/lib/zig/0.8.0
+export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin:/usr/local/janet:/usr/lib/zig/0.8.0
 export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin
 
 
@@ -61,7 +60,6 @@ alias gocover="go test -covermode=count -coverprofile=coverage.out ./... && go t
 alias gotest="go test -cover -v"
 alias gofulltest="go test -v -cover -covermode=count -coverprofile=.coverage.out ./... && go tool cover -func .coverage.out | grep total: | awk '{printf \"total code coverage: %s\\n\", \$3}' && go tool cover -html=.coverage.out -o coverage.html"
 alias glint="golangci-lint run"
-alias clip="xclip -sel clip"
 
 #### DOCKER ALIASES ####
 alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
@@ -101,7 +99,6 @@ export INKWELL_BLOGS_BUCKET="inkwell-test"
 export CPATH="./include:./lib"
 
 # source ~/.awsrc
-source ~/.linode
 alias aws-et="export AWS_SECRET_ACCESS_KEY=${ET_SECRET_KEY} && export AWS_ACCESS_KEY_ID=${ET_ACCESS_KEY}"
 
 export NVM_DIR="$HOME/.nvm"
@@ -109,5 +106,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # init pyenv
-eval "$(pyenv init --path)"
-. "$HOME/.cargo/env"
+eval "$(pyenv init -)"
