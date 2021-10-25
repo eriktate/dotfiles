@@ -20,7 +20,7 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bind -x '"\C-p": vim $(fzf);'
 
-alias ls='ls --color=auto'
+alias ls='ls -G'
 alias chrome="google-chrome-stable & disown"
 alias starti3="startx ~/.xinitrc i3"
 alias startflux="startx ~/.xinitrc flux"
@@ -33,15 +33,19 @@ alias coolit="sudo cpupower frequency-set -g schedutil & sudo sysctl vm.swappine
 alias qemu='qemu-system-x86_64'
 
 
-#### GO STUFF ####
+#### LANG STUFF ####
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
+export PYENV_ROOT=$HOME/.pyenv
+export ANDROID_HOME=$HOME/Library/Android/sdk
 
 #### ENV VARS ####
 export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 export PATH=$PATH:$GOBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin:/usr/local/janet:/usr/lib/zig/0.8.0
-export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin
+export PATH=$PATH:$PYENV_ROOT/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin
+# android paths
+export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 
 
 #### RUST STUFF ####
@@ -52,7 +56,7 @@ alias gs="git status"
 alias vim="nvim"
 # alias vimrc="vim ~/dotfiles/.vimrc"
 alias vimrc="vim ~/.config/nvim/init.vim"
-alias bashrc="vim ~/dotfiles/.bashrc"
+alias bashrc="vim ~/dotfiles/regolith/.bashrc"
 alias gowork="cd $GOPATH/src/github.com/eriktate"
 alias gogfx="cd ~/projects/learn-graphics"
 alias golingo="cd $GOPATH/src/github.com/eriktate/lingo"
@@ -60,6 +64,9 @@ alias gocover="go test -covermode=count -coverprofile=coverage.out ./... && go t
 alias gotest="go test -cover -v"
 alias gofulltest="go test -v -cover -covermode=count -coverprofile=.coverage.out ./... && go tool cover -func .coverage.out | grep total: | awk '{printf \"total code coverage: %s\\n\", \$3}' && go tool cover -html=.coverage.out -o coverage.html"
 alias glint="golangci-lint run"
+alias updateme="git fetch && git merge --no-edit origin/master && yarn && yarn build"
+alias aws-stg="aws-vault exec -t $(op get totp "Truebill AWS") tb-stg-eng -- aws"
+alias aws-prod="aws-vault exec -t $(op get totp "Truebill AWS") tb-prod-eng -- aws"
 
 #### DOCKER ALIASES ####
 alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
@@ -105,5 +112,17 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# TRUEBILL THINGS
+export BASE_DATABASE_URL=postgres://truebill@localhost:25432
+export DATABASE_URL=$BASE_DATABASE_URL/truebill_development
+export TRANSACTIONS_DATABASE_URL=$BASE_DATABASE_URL/truebill_transactions?sslmode=disable
+export REDIS_URL=redis://localhost:26379
+export REDIS_SESSIONS_URL=$REDIS_URL
+source ~/.truebill.sh
+
 # init pyenv
+eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
+
+# TMUX
+alias tmux="TERM=screen-256color-bce tmux"

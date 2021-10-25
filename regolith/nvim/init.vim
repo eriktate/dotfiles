@@ -36,6 +36,7 @@ Plug 'mxw/vim-jsx'
 Plug 'eriktate/vim-protobuf'
 Plug 'eriktate/vim-syntax-extra'
 Plug 'evanleck/vim-svelte'
+Plug 'udalov/kotlin-vim'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
@@ -110,7 +111,7 @@ set termguicolors
 
 """ Telescope
 " ctrl-p fuzzy file match
-nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <C-p> :lua require("telescope.builtin").find_files({find_command={"rg", "--files", "--hidden","--follow"}})<cr>
 nnoremap <leader>ff <cmd> Telescope live_grep<cr>
 nnoremap <leader>fb <cmd> Telescope .buffers<cr>
 
@@ -131,21 +132,23 @@ autocmd Filetype rescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 
 """ CoC settings
-" let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier', 'coc-go']
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> K <Plug>(coc-hover)
 
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 """ ALE settings
 " jump to next lint error

@@ -2,6 +2,8 @@
 # ~/.bashrc
 #
 
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
@@ -20,7 +22,6 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 bind -x '"\C-p": vim $(fzf);'
 
-alias ls='ls --color=auto'
 alias chrome="google-chrome-stable & disown"
 alias starti3="startx ~/.xinitrc i3"
 alias startflux="startx ~/.xinitrc flux"
@@ -37,12 +38,13 @@ export GOPATH=~/go
 export GOBIN=$GOPATH/bin
 export ZIGPATH=/usr/local/zig
 export ZIGBIN=$ZIGPATH/bin
+export PYENV_ROOT="$HOME/.pyenv"
 
 #### ENV VARS ####
 export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 export PATH=$PATH:$GOBIN:$ZIGBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin:/usr/local/janet:/usr/lib/zig/0.8.0
-export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin
+export PATH=$PATH:$PYENV_ROOT/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin
 
 
 #### RUST STUFF ####
