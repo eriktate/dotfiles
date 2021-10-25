@@ -101,6 +101,7 @@ export INKWELL_BLOGS_BUCKET="inkwell-test"
 export CPATH="./include:./lib"
 
 # source ~/.awsrc
+source ~/.linode
 alias aws-et="export AWS_SECRET_ACCESS_KEY=${ET_SECRET_KEY} && export AWS_ACCESS_KEY_ID=${ET_ACCESS_KEY}"
 
 export NVM_DIR="$HOME/.nvm"
@@ -108,5 +109,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # init pyenv
-eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 . "$HOME/.cargo/env"
