@@ -1,0 +1,8 @@
+import:
+  - ./.gruvbox.yml
+
+font:
+  normal:
+    family: mononoki Nerd Font Mono
+  # size: 18
+  size: 14
