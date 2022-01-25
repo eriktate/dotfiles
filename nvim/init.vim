@@ -5,8 +5,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'dense-analysis/ale'
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -32,7 +30,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'jparise/vim-graphql'
 Plug 'maxmellon/vim-jsx-pretty'
-Plug 'mxw/vim-jsx'
 Plug 'eriktate/vim-protobuf'
 Plug 'eriktate/vim-syntax-extra'
 Plug 'evanleck/vim-svelte'
@@ -47,6 +44,7 @@ call plug#end()
 
 filetype plugin indent on
 syntax enable
+set t_Co=256
 
 set encoding=utf-8
 set autoindent
@@ -75,6 +73,7 @@ set splitright
 set splitbelow
 
 imap jk <Esc>
+" imap ht <Esc>
 let mapleader = ","
 let g:mapleader = ","
 
@@ -130,6 +129,8 @@ autocmd Filetype svelte setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype rescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 
+" autocmd Filetype glsl setlocal commentstring=// %s
+
 """ CoC settings
 " let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
 " nmap <silent> gd <Plug>(coc-definition)
@@ -147,15 +148,6 @@ autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
 "   return !col || getline('.')[col - 1]  =~# '\s'
 " endfunction
 
-""" ALE settings
-" jump to next lint error
-nmap <silent> <C-e> <Plug>(ale_next_wrap)
-let g:ale_fixers = {
-\	'*': ['remove_trailing_lines', 'trim_whitespace'],
-\	'rust': ['rustfmt'],
-\}
-let g:ale_fix_on_save = 1
-
 """ Telescope settings
 command F Telescope live_grep
 
@@ -167,6 +159,11 @@ let g:svelte_preprocessors = ['ts']
 
 """ NVIM LSP Config
 lua << EOF
+local telescope = require('telescope')
+telescope.setup{
+	defaults = { file_ignore_patterns = {"vendor"} }
+}
+
 local nvim_lsp = require('lspconfig')
 local cmp = require('cmp')
 
@@ -195,14 +192,24 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 end
 
-local servers = { 'rust_analyzer', 'tsserver', 'gopls' }
+local servers = { 'rust_analyzer', 'tsserver', 'gopls', 'svelte', 'zls', 'rescriptls'}
 for _, lsp in ipairs(servers) do
-	nvim_lsp[lsp].setup {
+	config = {
 		on_attach = on_attach,
 		flags = {
 			debounce_text_changes = 150,
 		},
 		capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 	}
+
+	if lsp == 'zls' then
+		config.cmd = { '/home/erik/zls/zls' }
+	end
+
+	if lsp == 'rescriptls' then
+		config.cmd = {'node', '/home/erik/.vim/plugged/vim-rescript/server/out/server.js', '--stdio'}
+	end
+
+	nvim_lsp[lsp].setup(config)
 end
 EOF
