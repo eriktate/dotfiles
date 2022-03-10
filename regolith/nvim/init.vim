@@ -5,18 +5,19 @@ call plug#begin('~/.vim/plugged')
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'dense-analysis/ale'
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/vim-vsnip'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'mfussenegger/nvim-dap'
+Plug 'folke/trouble.nvim'
 
 """ Language plugins
 Plug 'fatih/vim-go'
@@ -32,7 +33,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'jparise/vim-graphql'
 Plug 'maxmellon/vim-jsx-pretty'
-Plug 'mxw/vim-jsx'
 Plug 'eriktate/vim-protobuf'
 Plug 'eriktate/vim-syntax-extra'
 Plug 'evanleck/vim-svelte'
@@ -111,7 +111,8 @@ set termguicolors
 
 """ Telescope
 " ctrl-p fuzzy file match
-nnoremap <C-p> :lua require("telescope.builtin").find_files({find_command={"rg", "--files", "--hidden","--follow"}})<cr>
+" nnoremap <C-p> :lua require("telescope.builtin").find_files({find_command={"rg", "--no-ignore", "--files", "--hidden", "--follow"}})<cr>
+nnoremap <C-p> <cmd> Telescope find_files<cr>
 nnoremap <leader>ff <cmd> Telescope live_grep<cr>
 nnoremap <leader>fb <cmd> Telescope .buffers<cr>
 
@@ -130,34 +131,18 @@ autocmd Filetype typescriptreact setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype svelte setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype rescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
+autocmd Filetype python setlocal ts=4 sts=4 sw=4 expandtab
 
-""" CoC settings
-let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier', 'coc-go']
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> K <Plug>(coc-hover)
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-""" ALE settings
-" jump to next lint error
-nmap <silent> <C-e> <Plug>(ale_next_wrap)
-let g:ale_fixers = {
-\	'*': ['remove_trailing_lines', 'trim_whitespace'],
-\	'rust': ['rustfmt'],
-\}
-let g:ale_fix_on_save = 1
 
 """ Telescope settings
 command F Telescope live_grep
@@ -168,14 +153,25 @@ let g:svelte_preprocessor_tags = [
 	\ ]
 let g:svelte_preprocessors = ['ts']
 
+
 """ NVIM LSP Config
 lua << EOF
 local nvim_lsp = require('lspconfig')
 local cmp = require('cmp')
 
 cmp.setup({
+	snippet = {
+		expand = function(args)
+			vim.fn["vsnip#anonymous"](args.body)
+		end
+	},
 	mapping = {
-		['<C-Space>'] = cmp.mapping.complete()
+		['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), {'i', 'c'}),
+		['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i', 'c'}),
+		['<C-Space>'] = cmp.mapping.complete(),
+		['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 'c'}),
+		['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 'c'}),
+		['<Tab>'] = cmp.mapping.confirm({ select = true }),
 	},
 	sources = {
 		{ name = 'nvim_lsp' },
@@ -196,16 +192,39 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
 	buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+	buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+	-- vim.api.nvim_command('autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 5000)', opts)
 end
 
-local servers = { 'rust_analyzer', 'tsserver', 'gopls' }
+local servers = { 'rust_analyzer', 'tsserver', 'gopls', 'pylsp' }
 for _, lsp in ipairs(servers) do
-	nvim_lsp[lsp].setup {
+	cfg = {
 		on_attach = on_attach,
 		flags = {
 			debounce_text_changes = 150,
 		},
 		capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 	}
+
+	if lsp == 'pylsp' then
+		-- cfg.cmd = { "pipenv", "run", "pylsp" }
+		cfg.settings = {
+			pylsp = {
+				plugins = {
+					pylint = {
+						enabled = true,
+						executable = "pipenv",
+						-- args = { "pylint", "run" } -- these are flipped for some reason...?
+						args = { "run", "pylint" } -- ...or not...?
+					}
+				}
+			}
+		}
+
+		-- print(vim.inspect(cfg))
+	end
+
+	nvim_lsp[lsp].setup(cfg)
 end
+
 EOF
