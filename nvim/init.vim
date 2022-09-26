@@ -15,6 +15,8 @@ Plug 'bronson/vim-trailing-whitespace'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'folke/trouble.nvim'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 
 """ Language plugins
 Plug 'fatih/vim-go'
@@ -27,12 +29,15 @@ Plug 'cespare/vim-toml'
 Plug 'elm-tooling/elm-vim'
 Plug 'rescript-lang/vim-rescript'
 Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
 Plug 'jparise/vim-graphql'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'eriktate/vim-protobuf'
 Plug 'eriktate/vim-syntax-extra'
-Plug 'evanleck/vim-svelte'
+Plug 'evanleck/vim-svelte', { 'branch': 'main' }
+Plug 'othree/html5.vim'
+Plug 'lifepillar/pgsql.vim'
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
@@ -157,6 +162,13 @@ let g:svelte_preprocessor_tags = [
 	\ ]
 let g:svelte_preprocessors = ['ts']
 
+""" prettier config
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
+
+""" postgres
+let g:sql_type_default = 'pgsql'
+
 """ NVIM LSP Config
 lua << EOF
 local telescope = require('telescope')
@@ -203,7 +215,7 @@ for _, lsp in ipairs(servers) do
 	}
 
 	if lsp == 'zls' then
-		config.cmd = { '/home/erik/zls/zls' }
+		config.cmd = { '/home/erik/zls/zig-out/bin/zls' }
 	end
 
 	if lsp == 'rescriptls' then
