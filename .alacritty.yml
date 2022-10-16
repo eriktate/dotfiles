@@ -4,5 +4,6 @@ import:
 font:
   normal:
     family: mononoki Nerd Font Mono
-  # size: 18
-  size: 14
+  # size: 18 # stream
+  size: 16 # laptop
+  # size: 14 # desktop
