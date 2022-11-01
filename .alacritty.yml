@@ -6,10 +6,9 @@ font:
     family: mononoki Nerd Font Mono
   # size: 18
   # size: 16
-  # size: 14
-  size: 12
-
-shell:
-  program: /bin/fish
-  args:
-    - --login
+  size: 14
+  # size: 12
+# shell:
+#   program: /bin/fish
+#   args:
+#     - --login
