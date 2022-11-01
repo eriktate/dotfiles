@@ -17,6 +17,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'folke/trouble.nvim'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+Plug 'wakatime/vim-wakatime'
+Plug 'dag/vim-fish'
 
 """ Language plugins
 Plug 'fatih/vim-go'
@@ -39,6 +41,7 @@ Plug 'lifepillar/pgsql.vim'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
 Plug 'simrat39/rust-tools.nvim'
+Plug 'NoahTheDuke/vim-just'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
@@ -126,6 +129,7 @@ set softtabstop=4
 set noexpandtab
 
 """ Filetype settings
+autocmd! BufNewFile,BufRead *.vs, *.fs set ft=glsl
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript setlocal ts=2 sts=2 sw=2 expandtab
@@ -134,8 +138,7 @@ autocmd Filetype typescriptreact setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype svelte setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype rescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
-
-" autocmd Filetype glsl setlocal commentstring=// %s
+autocmd Filetype glsl setlocal commentstring=//\ %s
 
 """ CoC settings
 " let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
@@ -213,7 +216,7 @@ for _, lsp in ipairs(servers) do
 		flags = {
 			debounce_text_changes = 150,
 		},
-		capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+		capabilities = require('cmp_nvim_lsp').default_capabilities(),
 	}
 
 	if lsp == 'zls' then
