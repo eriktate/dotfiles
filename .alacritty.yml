@@ -4,11 +4,14 @@ import:
 font:
   normal:
     family: mononoki Nerd Font Mono
-  # size: 18
-  # size: 16
-  size: 14
-  # size: 12
+  # size: 18  # stream
+  size: 16  # comfy
+  # size: 14  # dense
 # shell:
 #   program: /bin/fish
 #   args:
 #     - --login
+
+key_bindings:
+  - { key: V, mods: Control|Shift, action: Paste}
+  - { key: C, mods: Control|Shift, action: Copy }
