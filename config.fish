@@ -7,7 +7,7 @@ if not status is-interactive
 end
 
 # make it look nice
-theme_gruvbox dark medium
+# theme_gruvbox dark medium
 
 function fish_mode_prompt
 	echo ""
