@@ -15,6 +15,12 @@ Plug 'bronson/vim-trailing-whitespace'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'APZelos/blamer.nvim'
+Plug 'folke/trouble.nvim'
+Plug 'ruanyl/vim-gh-line'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 """ Language plugins
 Plug 'fatih/vim-go'
@@ -27,7 +33,7 @@ Plug 'cespare/vim-toml'
 Plug 'elm-tooling/elm-vim'
 Plug 'rescript-lang/vim-rescript'
 Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
+" Plug 'leafgarland/typescript-vim'
 Plug 'jparise/vim-graphql'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'eriktate/vim-protobuf'
@@ -36,6 +42,7 @@ Plug 'evanleck/vim-svelte'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
+Plug 'Rigellute/shades-of-purple.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
@@ -104,12 +111,17 @@ map <C-l> <C-W>l
 """ Theme
 let g:gruvbox_contrast_dark = 'medium'
 colorscheme gruvbox
+" colorscheme shades_of_purple
 set background=dark
 set termguicolors
 
-""" Telescope
+" fzf config
+let g:fzf_layout = { 'window': 'bot20new' }
+autocmd! FileType fzf tnoremap <buffer> jk <cmd>bdelete!<CR>
+
 " ctrl-p fuzzy file match
-nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <C-p> <cmd> Files<cr>
+" nnoremap <C-p> <cmd> Telescope find_files<cr>
 nnoremap <leader>ff <cmd> Telescope live_grep<cr>
 nnoremap <leader>fb <cmd> Telescope .buffers<cr>
 
@@ -161,8 +173,9 @@ let g:svelte_preprocessors = ['ts']
 lua << EOF
 local telescope = require('telescope')
 telescope.setup{
-	defaults = { file_ignore_patterns = {"vendor"} }
+	defaults = { file_ignore_patterns = {"vendor"} },
 }
+telescope.load_extension('fzf')
 
 local nvim_lsp = require('lspconfig')
 local cmp = require('cmp')
