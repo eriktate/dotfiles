@@ -10,6 +10,6 @@ font:
   size: 12
 
 shell:
-  program: /bin/fish
+  program: /usr/bin/fish
   args:
     - --login

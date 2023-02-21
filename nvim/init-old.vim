@@ -19,6 +19,7 @@ Plug 'folke/trouble.nvim'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 Plug 'wakatime/vim-wakatime'
 Plug 'dag/vim-fish'
+Plug 'APZelos/blamer.nvim'
 
 """ Language plugins
 Plug 'fatih/vim-go'
@@ -42,6 +43,7 @@ Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'NoahTheDuke/vim-just'
+Plug 'elixir-editors/vim-elixir'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
@@ -180,7 +182,7 @@ let g:rustfmt_autosave = 1
 lua << EOF
 local telescope = require('telescope')
 telescope.setup{
-	defaults = { file_ignore_patterns = {"vendor"} }
+	defaults = { file_ignore_patterns = {"vendor", "deps", "_build"} }
 }
 
 local nvim_lsp = require('lspconfig')
