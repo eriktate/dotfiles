@@ -8,7 +8,9 @@ if not status is-interactive
 end
 
 # make it look nice
-theme_gruvbox dark medium
+# theme_gruvbox dark medium
+# fish_config theme choose tokyonight_moon
+source ~/.config/fish/themes/kanagawa.fish
 
 function fish_mode_prompt
 	echo ""

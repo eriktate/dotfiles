@@ -1,5 +1,7 @@
 import:
-  - ./.gruvbox.yml
+  # - ./.gruvbox.yml
+  # - ./.tokyonight_moon.yml
+  - ./.kanagawa.yml
 
 font:
   normal:

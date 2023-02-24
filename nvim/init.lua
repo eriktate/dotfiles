@@ -1,3 +1,5 @@
+local api = vim.api
+
 -- BEGIN PLUGINS
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -16,6 +18,7 @@ require("lazy").setup({
 	-- tooling
 	"nvim-lua/popup.nvim",
 	"nvim-lua/plenary.nvim",
+	{ "nvim-treesitter/nvim-treesitter", build=":TSUpdate" },
 	"nvim-telescope/telescope.nvim",
 	"neovim/nvim-lspconfig",
 	"hrsh7th/nvim-cmp",
@@ -56,12 +59,15 @@ require("lazy").setup({
 	-- visuals
 	"morhetz/gruvbox",
 	"kyazdani42/nvim-web-devicons",
-	"itchyny/lightline.vim",
+	"nvim-lualine/lualine.nvim",
+	"kyazdani42/nvim-web-devicons",
 	"airblade/vim-gitgutter",
+	"folke/tokyonight.nvim",
+	"rebelot/kanagawa.nvim",
 })
 
 vim.cmd("filetype plugin indent on")
-vim.opt.syntax = "on"
+vim.cmd("syntax on")
 vim.opt.complete:remove { 1 }
 vim.opt.nrformats:remove { "octal" }
 vim.opt.ignorecase = true
@@ -75,6 +81,7 @@ vim.opt.whichwrap:append("l")
 vim.opt.linebreak = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+-- vim.opt.shortmess:remove { "F" }
 vim.opt.list = true
 vim.opt.listchars = {
 	tab = "▸ ",
@@ -105,26 +112,64 @@ local two_space_filetypes = {
 	"html",
 }
 
-vim.api.nvim_create_autocmd(
+local group_id = api.nvim_create_augroup("LocalAutos", { clear = true })
+api.nvim_create_autocmd(
 	"FileType",
-	{ pattern = two_space_filetypes, command = "set local ts=2 sts=2 sw=2 expandtab" }
+	{
+		group = group_id,
+		pattern = two_space_filetypes,
+		command = [[setlocal ts=2 sts=2 sw=2 expandtab]],
+	}
 )
 
-vim.api.nvim_create_autocmd(
+api.nvim_create_autocmd(
 	{ "BufNewFile", "BufRead" },
-	{ pattern = { "*.vs", "*.fs" }, command = "set ft=glsl" }
+	{
+		group = group_id,
+		pattern = { "*.vs", "*.fs" },
+		command = "set ft=glsl",
+	}
 )
 
-vim.api.nvim_create_autocmd(
+api.nvim_create_autocmd(
 	"FileType",
-	{ pattern = "glsl", command = [[setlocal commentstring=//\ %s]] }
+	{
+		group = group_id,
+		pattern = "glsl",
+		command = [[setlocal commentstring=//\ %s]],
+	}
 )
 -- END FILETYPE
 
 -- BEGIN THEME
 vim.opt.termguicolors = true
-vim.cmd("colorscheme gruvbox")
-vim.g.gruvbox_contrast_dark = "medium"
+-- vim.cmd("colorscheme gruvbox")
+-- vim.g.gruvbox_contrast_dark = "medium"
+--
+require("tokyonight").setup({
+	style = "moon",
+	styles = {
+		comments = { italic = true },
+		keywords = { italic = false },
+		functions = { italic = false },
+		variables = { italic = false },
+	}
+})
+-- vim.cmd("colorscheme tokyonight-moon")
+
+require("kanagawa").setup({
+	commentStyle = { italic = false },
+	keywordStyle = { italic = false },
+	variablebuiltinStyle = { italic = false },
+})
+vim.cmd("colorscheme kanagawa")
+
+require("lualine").setup({
+	options = {
+		theme = "kanagawa",
+		icons_enabled = true,
+	},
+})
 -- END THEME
 
 -- BEGIN KEYMAPS
@@ -190,7 +235,7 @@ cmp.setup({
 })
 
 local on_attach = function(client, bufnr)
-	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+	api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
 	local bufopts = { noremap = true, silent = true, buffer = bufnr }
 	vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
