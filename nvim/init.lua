@@ -81,6 +81,7 @@ vim.opt.whichwrap:append("l")
 vim.opt.linebreak = true
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+vim.opt.mouse = nil
 -- vim.opt.shortmess:remove { "F" }
 vim.opt.list = true
 vim.opt.listchars = {
@@ -197,11 +198,14 @@ vim.keymap.set("n", "<leader>al", ":set nornu")
 -- telescope
 vim.keymap.set("n", "<C-p>", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope live_grep<cr>")
-vim.keymap.set("n", "<leader>fb", "<cmd>Telescope .buffers<cr>")
+vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>")
 -- END KEYMAPS
 
 -- BEGIN PLUGIN CONFIGS
 -- vim-svelte
+vim.g.svelte_preprocessor_tags = {
+	{ name = "ts", tag = "script", as = "typescript" },
+}
 vim.g.svelte_preprocessors = { "ts" }
 
 -- prettier
@@ -242,7 +246,7 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
 	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
 	vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-	vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+	vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references, bufopts)
 end
 
 local servers = { 'tsserver', 'gopls', 'svelte', 'zls', 'rescriptls', 'rust_analyzer'}
