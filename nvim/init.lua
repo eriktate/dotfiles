@@ -26,6 +26,7 @@ require("lazy").setup({
 	"hrsh7th/cmp-buffer",
 	"tpope/vim-commentary",
 	"tpope/vim-surround",
+	"tpope/vim-repeat",
 	"jiangmiao/auto-pairs",
 	"airblade/vim-gitgutter",
 	"tpope/vim-fugitive",
@@ -33,6 +34,9 @@ require("lazy").setup({
 	{ "prettier/vim-prettier", build="yarn install --frozen-lockfile --production" },
 	"wakatime/vim-wakatime",
 	"APZelos/blamer.nvim",
+	"mfussenegger/nvim-dap",
+	{ "stevearc/oil.nvim", opts = {}, dependencies = { "nvim-tree/nvim-web-devicons" }},
+	-- "sakhnik/nvim-gdb",
 
 	-- language plugins
 	"fatih/vim-go",
@@ -55,6 +59,7 @@ require("lazy").setup({
 	"NoahTheDuke/vim-just",
 	"elixir-editors/vim-elixir",
 	"dag/vim-fish",
+	"Tetralux/odin.vim",
 
 	-- visuals
 	"morhetz/gruvbox",
@@ -85,7 +90,7 @@ vim.opt.mouse = nil
 -- vim.opt.shortmess:remove { "F" }
 vim.opt.list = true
 vim.opt.listchars = {
-	tab = "▸ ",
+	tab = "→ ",
 	eol = "¬",
 	trail = "-",
 	extends = ">",
@@ -111,6 +116,8 @@ local two_space_filetypes = {
 	"svelte",
 	"rescript",
 	"html",
+	"json",
+	"ocaml",
 }
 
 local group_id = api.nvim_create_augroup("LocalAutos", { clear = true })
@@ -136,7 +143,7 @@ api.nvim_create_autocmd(
 	"FileType",
 	{
 		group = group_id,
-		pattern = "glsl",
+		pattern = {"glsl", "rescript", "c", "cpp"},
 		command = [[setlocal commentstring=//\ %s]],
 	}
 )
@@ -209,22 +216,54 @@ vim.g.svelte_preprocessor_tags = {
 vim.g.svelte_preprocessors = { "ts" }
 
 -- prettier
+vim.g["prettier#config#parser"] = "typescript"
 vim.g["prettier#autoformat"] = 1
 vim.g["prettier#autoformat_require_pragma"] = 0
+vim.g["prettier#quickfix_auto_focus"] = 0
 
 -- postgres
 vim.g.sql_type_default = 'pgsql'
 
 -- rust
 vim.g.rustfmt_autosave = 1
--- END PLUGIN CONFIGS
 
--- BEGIN LSP CONFIG
 local telescope = require('telescope')
 telescope.setup{
 	defaults = { file_ignore_patterns = {"vendor", "deps", "_build", "target"} }
 }
 
+-- treesitter
+require('nvim-treesitter.configs').setup({
+	ensure_installed = { "c", "cpp", "lua", "go", "rust", "zig", "odin", "typescript", "ocaml", "vim", "glsl", "fish", "bash", "hcl", "markdown", "html", "css", "proto", "json", "sql"},
+	auto_install = true,
+	highlight = {
+		enable = true,
+	},
+})
+--oil
+require('oil').setup({
+  keymaps = {
+    ["g?"] = "actions.show_help",
+    ["<CR>"] = "actions.select",
+    ["<C-s>"] = "actions.select_vsplit",
+    ["<C-t>"] = "actions.select_tab",
+    ["<C-p>"] = "actions.preview",
+    ["<C-c>"] = "actions.close",
+    ["<C-;>"] = "actions.refresh",
+    ["-"] = "actions.parent",
+    ["_"] = "actions.open_cwd",
+    ["`"] = "actions.cd",
+    ["~"] = "actions.tcd",
+    ["gs"] = "actions.change_sort",
+    ["gx"] = "actions.open_external",
+    ["g."] = "actions.toggle_hidden",
+    ["g\\"] = "actions.toggle_trash",
+  },
+  use_default_keymaps = false,
+})
+-- END PLUGIN CONFIGS
+--
+-- BEGIN LSP CONFIG
 local nvim_lsp = require('lspconfig')
 local cmp = require('cmp')
 
@@ -247,26 +286,61 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
 	vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references, bufopts)
+
+	vim.api.nvim_create_augroup('AutoFormatting', {})
+	vim.api.nvim_create_autocmd('BufWritePre', {
+	  -- pattern = '*',
+	  group = 'AutoFormatting',
+	  callback = function()
+		vim.lsp.buf.format()
+	  end,
+	})
 end
 
-local servers = { 'tsserver', 'gopls', 'svelte', 'zls', 'rescriptls', 'rust_analyzer'}
+local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "tailwindcss", "terraformls", "pyright", "ols", "clangd", "ocamllsp"}
 for _, lsp in ipairs(servers) do
 	config = {
 		on_attach = on_attach,
 		flags = {
 			debounce_text_changes = 150,
 		},
-		capabilities = require('cmp_nvim_lsp').default_capabilities(),
+		capabilities = require("cmp_nvim_lsp").default_capabilities(),
 	}
 
 	if lsp == 'zls' then
-		config.cmd = { '/home/erik/zls/zig-out/bin/zls' }
+		config.cmd = { "/home/erik/zls/zig-out/bin/zls" }
 	end
 
-	if lsp == 'rescriptls' then
-		config.cmd = {'node', '/home/erik/.vim/plugged/vim-rescript/server/out/server.js', '--stdio'}
+	if lsp == "rescriptls" then
+		config.cmd = {"node", "/home/erik/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
 	end
 
 	nvim_lsp[lsp].setup(config)
 end
+
+local dap = require('dap')
+dap.configurations.cpp = {
+	{
+		name = 'Launch',
+		type = 'lldb',
+		request = 'launch',
+		program = function()
+			return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+		end,
+		cwd = '${workspaceFolder}',
+		stopOnEntry = false,
+		args = {},
+	},
+	{
+		name = 'Attach to process',
+		type = 'lldb',
+		request = 'attach',
+		pid = require('dap.utils').pick_process,
+		args = {},
+	}
+}
+
+dap.configurations.c = dap.configurations.cpp
+dap.configurations.odin = dap.configurations.cpp
+
 -- END LSP CONFIG

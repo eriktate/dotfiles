@@ -38,12 +38,14 @@ alias rust-analyzer="rustup run stable rust-analyzer"
 set -gx GOPATH ~/go
 set -gx GOBIN $GOPATH/bin
 set -gx GOROOT /usr/local/go
+set -gx ODIN_ROOT $HOME/odin
 set -gx ZIGPATH $HOME/zig/build
 set -gx ZIGBIN $ZIGPATH/stage3/bin
 set -gx RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/sr
 set -gx RUSTUP_STABLE_BIN $HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin
 
 # the path
+fish_add_path /usr/local/nvim/bin
 fish_add_path $GOBIN
 fish_add_path $ZIGBIN
 fish_add_path $RUSTUP_STABLE_BIN
@@ -55,6 +57,8 @@ fish_add_path $HOME/.pyenv/bin
 fish_add_path $HOME/aseprite/build/bin
 fish_add_path $GOROOT/bin
 fish_add_path $GOROOT/bin
+fish_add_path $HOME/odin
+fish_add_path $HOME/odin/ols
 
 nvm use 14 &> /dev/null
 
@@ -67,3 +71,10 @@ set -gx PATH "$PNPM_HOME" $PATH
 status is-interactive; and pyenv init --path | source
 pyenv init - | source
 # pyenv end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
+
+# ocaml
+eval (opam env --switch=5.1.0)
