@@ -1,10 +1,14 @@
 set -gx EDITOR nvim
 set -gx NVIM_PATH /usr/bin/nvim
+set -gx SSH_AUTH_SOCK ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+
+# set trusted_fish_config $HOME/rkt/share/fish
+# set fish_data_path $trusted_fish_config $__fish_sysconf_dir $__fish_sysconfdir $__fish_data_dir $__fish_datadir
 
 set fish_greeting
 # don't do anything in non-interactive shells
 if not status is-interactive
-	return
+	exit
 end
 
 # make it look nice
@@ -33,6 +37,8 @@ alias bashrc="vim ~/.config/fish/config.fish"
 alias flmngo="~/projects/flmngo/api/tmux.sh"
 alias versate="~/projects/versate/api/tmux.sh"
 alias rust-analyzer="rustup run stable rust-analyzer"
+alias gch='git branch --all | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
+alias tmux="TERM=xterm-256color command tmux"
 
 # lang stuff
 set -gx GOPATH ~/go
@@ -60,7 +66,7 @@ fish_add_path $GOROOT/bin
 fish_add_path $HOME/odin
 fish_add_path $HOME/odin/ols
 
-nvm use 14 &> /dev/null
+# nvm use 16 &> /dev/null
 
 # pnpm
 set -gx PNPM_HOME "/home/erik/.local/share/pnpm"
@@ -68,8 +74,8 @@ set -gx PATH "$PNPM_HOME" $PATH
 # pnpm end
 
 # pyenv
-status is-interactive; and pyenv init --path | source
-pyenv init - | source
+# status is-interactive; and pyenv init --path | source
+# pyenv init - | source
 # pyenv end
 
 # bun
