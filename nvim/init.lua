@@ -118,6 +118,7 @@ local two_space_filetypes = {
 	"html",
 	"json",
 	"ocaml",
+	"nix",
 }
 
 local group_id = api.nvim_create_augroup("LocalAutos", { clear = true })
@@ -322,7 +323,7 @@ local on_attach = function(client, bufnr)
 	})
 end
 
-local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "tailwindcss", "terraformls", "pyright", "ols", "clangd", "ocamllsp"}
+local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "tailwindcss", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd"}
 for _, lsp in ipairs(servers) do
 	config = {
 		on_attach = on_attach,
@@ -332,6 +333,7 @@ for _, lsp in ipairs(servers) do
 		capabilities = require("cmp_nvim_lsp").default_capabilities(),
 	}
 
+	-- below is for building zls from source
 	-- if lsp == 'zls' then
 	-- linux
 	--	config.cmd = { "/home/erik/zls/zig-out/bin/zls" }
