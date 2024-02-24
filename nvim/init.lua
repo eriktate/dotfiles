@@ -35,8 +35,8 @@ require("lazy").setup({
 	"wakatime/vim-wakatime",
 	"APZelos/blamer.nvim",
 	"mfussenegger/nvim-dap",
-	{ "stevearc/oil.nvim", opts = {}, dependencies = { "nvim-tree/nvim-web-devicons" }},
-	-- "sakhnik/nvim-gdb",
+	"junegunn/goyo.vim",
+	{ "stevearc/oil.nvim", opts = {}, dependencies = { "nvim-tree/nvim-web-devicons" } },
 
 	-- language plugins
 	"fatih/vim-go",
@@ -63,7 +63,6 @@ require("lazy").setup({
 
 	-- visuals
 	"morhetz/gruvbox",
-	"kyazdani42/nvim-web-devicons",
 	"nvim-lualine/lualine.nvim",
 	"kyazdani42/nvim-web-devicons",
 	"airblade/vim-gitgutter",
@@ -154,15 +153,15 @@ vim.opt.termguicolors = true
 -- vim.cmd("colorscheme gruvbox")
 -- vim.g.gruvbox_contrast_dark = "medium"
 --
-require("tokyonight").setup({
-	style = "moon",
-	styles = {
-		comments = { italic = true },
-		keywords = { italic = false },
-		functions = { italic = false },
-		variables = { italic = false },
-	}
-})
+-- require("tokyonight").setup({
+-- 	style = "moon",
+-- 	styles = {
+-- 		comments = { italic = true },
+-- 		keywords = { italic = false },
+-- 		functions = { italic = false },
+-- 		variables = { italic = false },
+-- 	}
+-- })
 -- vim.cmd("colorscheme tokyonight-moon")
 
 require("kanagawa").setup({
@@ -199,13 +198,17 @@ vim.keymap.set("n", "/", [[/\v]])
 vim.keymap.set("v", "/", [[/\v]])
 
 -- line style
-vim.keymap.set("n", "<leader>rl", ":set rnu")
-vim.keymap.set("n", "<leader>al", ":set nornu")
+vim.keymap.set("n", "<leader>rl", ":set rnu<cr>")
+vim.keymap.set("n", "<leader>al", ":set nornu<cr>")
 
 -- telescope
 vim.keymap.set("n", "<C-p>", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope live_grep<cr>")
 vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>")
+
+-- ez delete
+vim.keymap.set("n", "<leader>dd", "<cmd>call delete(expand('%'))<cr>")
+
 -- END KEYMAPS
 
 -- BEGIN PLUGIN CONFIGS
@@ -226,6 +229,25 @@ vim.g.sql_type_default = 'pgsql'
 
 -- rust
 vim.g.rustfmt_autosave = 1
+
+-- goyo
+vim.g.goyo_linenr = 1
+
+-- treesitter
+local treesitter = require('nvim-treesitter.configs')
+treesitter.setup({
+	ensure_installed = { "go", "rust", "c", "typescript", "tsx" },
+	auto_install = true,
+	ignore_install = { "javascript" },
+	highlight = {
+		enable = true,
+	}
+})
+
+-- oil
+require("oil").setup()
+
+-- END PLUGIN CONFIGS
 
 local telescope = require('telescope')
 telescope.setup{
@@ -277,6 +299,8 @@ cmp.setup({
 	}
 })
 
+vim.api.nvim_create_augroup('AutoFormatting', {})
+
 local on_attach = function(client, bufnr)
 	api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -289,7 +313,7 @@ local on_attach = function(client, bufnr)
 
 	vim.api.nvim_create_augroup('AutoFormatting', {})
 	vim.api.nvim_create_autocmd('BufWritePre', {
-	  -- pattern = '*',
+	  buffer = bufnr,
 	  group = 'AutoFormatting',
 	  callback = function()
 		vim.lsp.buf.format()
@@ -307,9 +331,12 @@ for _, lsp in ipairs(servers) do
 		capabilities = require("cmp_nvim_lsp").default_capabilities(),
 	}
 
-	if lsp == 'zls' then
-		config.cmd = { "/home/erik/zls/zig-out/bin/zls" }
-	end
+	-- if lsp == 'zls' then
+	-- linux
+	--	config.cmd = { "/home/erik/zls/zig-out/bin/zls" }
+	-- macos
+	--	config.cmd = { '/Users/ETate1/zls/zig-out/bin/zls' }
+	-- end
 
 	if lsp == "rescriptls" then
 		config.cmd = {"node", "/home/erik/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
