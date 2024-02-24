@@ -342,7 +342,7 @@ local on_attach = function(client, bufnr)
 
 	vim.api.nvim_create_augroup('AutoFormatting', {})
 	vim.api.nvim_create_autocmd('BufWritePre', {
-	  -- pattern = '*',
+	  buffer = bufnr,
 	  group = 'AutoFormatting',
 	  callback = function()
 		vim.lsp.buf.format()
@@ -359,11 +359,6 @@ for _, lsp in ipairs(servers) do
 		},
 		capabilities = require("cmp_nvim_lsp").default_capabilities(),
 	}
-
-	-- below is for building zls from source
-	-- if lsp == "zls" then
-	-- 	config.cmd = { HOME .. "/zls/zig-out/bin/zls" }
-	-- end
 
 	if lsp == "rescriptls" then
 		config.cmd = {"node", HOME .. "/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
