@@ -7,7 +7,10 @@ export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 export ZIGBIN=$HOME/zig/build/stage3/bin
 export PATH=$PATH:$GOBIN:$ZIGBIN:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin
-eval $(/opt/homebrew/bin/brew shellenv)
+if [[ $(uname) == "Darwin" ]]; then
+	eval $(/opt/homebrew/bin/brew shellenv)
+	source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 # Prompt
 autoload -Uz vcs_info
@@ -32,7 +35,6 @@ alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
 alias docker-rmi="sudo docker image rm \$(sudo docker image ls -aq)"
 
 # Highlighting
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue
 ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue
 ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
