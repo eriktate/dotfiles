@@ -1,4 +1,5 @@
 local api = vim.api
+local HOME = os.getenv('HOME')
 
 -- BEGIN PLUGINS
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -24,6 +25,8 @@ require("lazy").setup({
 	"hrsh7th/nvim-cmp",
 	"hrsh7th/cmp-nvim-lsp",
 	"hrsh7th/cmp-buffer",
+	"L3MON4D3/LuaSnip",
+	"saadparwaiz1/cmp_luasnip",
 	"tpope/vim-commentary",
 	"tpope/vim-surround",
 	"tpope/vim-repeat",
@@ -38,6 +41,8 @@ require("lazy").setup({
 	"junegunn/goyo.vim",
 	{ "stevearc/oil.nvim", opts = {}, dependencies = { "nvim-tree/nvim-web-devicons" } },
 	"mfussenegger/nvim-dap",
+	"tpope/vim-dadbod",
+	"kristijanhusak/vim-dadbod-ui",
 
 	-- language plugins
 	"fatih/vim-go",
@@ -61,6 +66,8 @@ require("lazy").setup({
 	"elixir-editors/vim-elixir",
 	"dag/vim-fish",
 	"Tetralux/odin.vim",
+	"gleam-lang/gleam.vim",
+	"joerdav/templ.vim",
 
 	-- visuals
 	"morhetz/gruvbox",
@@ -69,6 +76,7 @@ require("lazy").setup({
 	"airblade/vim-gitgutter",
 	"folke/tokyonight.nvim",
 	"rebelot/kanagawa.nvim",
+	"norcalli/nvim-colorizer.lua",
 })
 
 vim.cmd("filetype plugin indent on")
@@ -146,6 +154,15 @@ api.nvim_create_autocmd(
 		group = group_id,
 		pattern = {"glsl", "rescript", "c", "cpp"},
 		command = [[setlocal commentstring=//\ %s]],
+	}
+)
+
+api.nvim_create_autocmd(
+	"FileType",
+	{
+		group = group_id,
+		pattern = { "sql", "pgsql" },
+		command = [[setlocal commentstring=--\ %s]],
 	}
 )
 -- END FILETYPE
@@ -238,7 +255,7 @@ vim.g.goyo_linenr = 1
 -- treesitter
 local treesitter = require('nvim-treesitter.configs')
 treesitter.setup({
-	ensure_installed = { "go", "rust", "c", "typescript", "tsx" },
+	ensure_installed = { "go", "rust", "c", "typescript", "tsx", "gleam", "templ" },
 	auto_install = true,
 	ignore_install = { "javascript" },
 	highlight = {
@@ -292,8 +309,14 @@ local nvim_lsp = require('lspconfig')
 local cmp = require('cmp')
 
 cmp.setup({
+	snippet = {
+		expand = function(args)
+			require('luasnip').lsp_expand(args.body)
+		end
+	},
 	mapping = {
-		['<C-Space>'] = cmp.mapping.complete()
+		['<C-Space>'] = cmp.mapping.complete(),
+		['<Tab>'] = cmp.mapping.confirm({ select = true }),
 	},
 	sources = {
 		{ name = 'nvim_lsp' },
@@ -323,7 +346,7 @@ local on_attach = function(client, bufnr)
 	})
 end
 
-local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "tailwindcss", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd"}
+local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "htmx", "html", "cssls", "stylelint_lsp" }
 for _, lsp in ipairs(servers) do
 	config = {
 		on_attach = on_attach,
@@ -334,15 +357,30 @@ for _, lsp in ipairs(servers) do
 	}
 
 	-- below is for building zls from source
-	-- if lsp == 'zls' then
-	-- linux
-	--	config.cmd = { "/home/erik/zls/zig-out/bin/zls" }
-	-- macos
-	--	config.cmd = { '/Users/ETate1/zls/zig-out/bin/zls' }
-	-- end
+	if lsp == "zls" then
+		config.cmd = { HOME .. "/zls/zig-out/bin/zls" }
+	end
 
 	if lsp == "rescriptls" then
-		config.cmd = {"node", "/home/erik/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
+		config.cmd = {"node", HOME .. "/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
+	end
+
+	if lsp == "cssls" then
+		config.cmd = { "bunx", "vscode-css-language-server", "--stdio" }
+	end
+
+	if lsp == "html" then
+		config.cmd = { "bunx", "vscode-html-language-server", "--stdio" }
+		-- config.init_options = { provideFormatter = false }
+	end
+
+	if lsp == "stylelint_lsp" then
+		config.cmd = { "bunx", "stylelint-lsp", "--stdio" }
+		config.filetypes = { "css" }
+	end
+
+	if lsp == "tsserver" then
+		config.cmd = { "bunx", "typescript-language-server", "--stdio" }
 	end
 
 	nvim_lsp[lsp].setup(config)
