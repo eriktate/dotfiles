@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-swww init && swww img $HOME/Pictures/animated-samurai-wallpaper.gif &
+swww init && swww img $HOME/Pictures/neon-shallows.webp &
 
 nm-applet --indicator &
-mpd &
 waybar &
-mako
+mako &
