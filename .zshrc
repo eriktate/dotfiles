@@ -5,8 +5,9 @@ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
 export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
-export ZIGBIN=$HOME/zig/build/stage3/bin
-export PATH=$PATH:$GOBIN:$ZIGBIN:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin
+# export ZIGBIN=$HOME/zig/build/stage3/bin
+export ZIGBIN=/usr/local/zig
+export PATH=$PATH:$GOBIN:$ZIGBIN:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin
 if [[ $(uname) == "Darwin" ]]; then
 	eval $(/opt/homebrew/bin/brew shellenv)
 	source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
