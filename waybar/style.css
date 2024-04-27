@@ -1,202 +1,187 @@
+/* =============================================================================
+ *
+ * Waybar configuration
+ *
+ * Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+ *
+ * =========================================================================== */
+
+@define-color sumiInk0      #16161D;
+@define-color sumiInk1      #181820;
+@define-color sumiInk2      #1a1a22;
+@define-color sumiInk3      #1F1F28;
+@define-color sumiInk4      #2A2A37;
+@define-color sumiInk5      #363646;
+@define-color sumiInk6      #54546D;
+@define-color waveBlue1     #223249;
+@define-color waveBlue2     #2D4F67;
+@define-color winterGreen   #2B3328;
+@define-color winterYellow  #49443C;
+@define-color winterRed     #43242B;
+@define-color winterBlue    #252535;
+@define-color autumnGreen   #76946A;
+@define-color autumnRed     #C34043;
+@define-color autumnYellow  #DCA561;
+@define-color samuraiRed    #E82424;
+@define-color roninYellow   #FF9E3B;
+@define-color waveAqua1     #6A9589;
+@define-color dragonBlue    #658594;
+@define-color oldWhite      #C8C093;
+@define-color fujiWhite     #DCD7BA;
+@define-color fujiGray      #727169;
+@define-color oniViolet     #957FB8;
+@define-color oniViolet2    #b8b4d0;
+@define-color crystalBlue   #7E9CD8;
+@define-color springViolet1 #938AA9;
+@define-color springViolet2 #9CABCA;
+@define-color springBlue    #7FB4CA;
+@define-color lightBlue     #A3D4D5;
+@define-color springGreen   #98BB6C;
+@define-color boatYellow1   #938056;
+@define-color boatYellow2   #C0A36E;
+@define-color carpYellow    #E6C384;
+@define-color sakuraPink    #D27E99;
+@define-color waveRed       #E46876;
+@define-color peachRed      #FF5D62;
+@define-color surimiOrange  #FFA066;
+@define-color katanaGray    #717C7C;
+
+/* -----------------------------------------------------------------------------
+ * Base styles
+ * -------------------------------------------------------------------------- */
+
+/* Reset all styles */
+
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
-    font-family: Mononoki Nerd Font, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 24px;
+	color: @fujiWhite;
+	border: 0;
+	border-radius: 0;
+	padding: 0 0;
+	font-family: Mononoki Nerd Font, Symbols Nerd Font Mono;
+	font-size: 18pt;
+	margin-right: 5px;
+	margin-left: 5px;
+	padding-bottom:2px;
 }
 
 window.DP-1 * {
-	font-size: 16px;
+	font-size: 10pt;
 }
 
 window#waybar {
-    color: #c8c093;
-    transition-property: background-color;
-    transition-duration: .5s;
-}
-
-window#waybar.hidden {
-    opacity: 0.2;
-}
-
-/*
-window#waybar.empty {
-    background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
-#window {
-	margin-left: 1.5rem;
-}
-
-window.DP-1 #window {
-	margin-left: 1rem;
-}
-
-window#waybar.termite {
-    background-color: #3F3F3F;
-}
-
-window#waybar.chromium {
-    background-color: #000000;
-    border: none;
-}
-
-button {
-    /* Use box-shadow instead of border so the text isn't offset */
-    box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
-    border: none;
-    border-radius: 0;
-}
-
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
-button:hover {
-    background: inherit;
-    box-shadow: inset 0 -3px #ffffff;
+	background: @sumiInk3;
+	border-radius: 20px 20px 20px 20px;
+	opacity: 0.6;
 }
 
 #workspaces button {
-    background-color: transparent;
-    color: #c8c093;
-	border-radius: 32px;
-	margin: 0 26px;
-}
-
-window.DP-1 #workspaces button {
-	margin: 0 10px;
-}
-
-#workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
+	padding: 2px 0px;
+	color: @fujiWhite;
+	margin-top:2px;
+	border-bottom: 2px solid @oldWhite;
 }
 
 #workspaces button.focused {
-    background-color: #64727D;
-    box-shadow: inset 0 -3px #ffffff;
+	border-bottom: 2px solid @oniViolet;
 }
 
-#workspaces button.active {
-    background-color: #957fb8;
-	color: #090618;
+#clock, #battery, #cpu, #memory, #idle_inhibitor, #temperature, #custom-keyboard-layout, #backlight, #network, #pulseaudio, #tray, #window, #custom-launcher, #custom-power, #custom-network_traffic, #custom-weather{
+	padding: 0 1rem;
 }
 
-#workspaces button.urgent {
-    background-color: #eb4d4b;
+/* -----------------------------------------------------------------------------
+ * Module styles
+ * -------------------------------------------------------------------------- */
+
+#battery {
+    color: @autumnGreen;
 }
 
-#mode {
-    background-color: #64727D;
-    border-bottom: 3px solid #ffffff;
+#battery.charging {
+    color: @surimiOrange;
 }
 
-#clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#network,
-#pulseaudio,
-#wireplumber,
-#custom-media,
-#tray,
-#mode,
-#idle_inhibitor,
-#scratchpad,
-#mpd {
-	padding: 6px;
-	border-radius: 8px;
-    color: #c8c093;
-    background-color: #363646;
-	margin-top: 8px;
-	margin-right: 4px;
+@keyframes blink {
+    to {
+        color: #4c566a;
+        background-color: #eceff4;
+    }
 }
 
-label:focus {
-    background-color: #000000;
+#battery.critical:not(.charging) {
+    background: @peachRed;
+    color: @fujiWhite;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
+#cpu {
+    color: @springGreen;
+}
+
+#memory {
+    color: @sakuraPink;
+}
+
+#network.disabled {
+    color: @peachRed;
+}
+
+#network{
+    color: @autumnGreen;
+}
 
 #network.disconnected {
-    background-color: #c34043;
+    color: @peachRed;
+}
+
+#pulseaudio {
+    color: @oniViolet;
 }
 
 #pulseaudio.muted {
-    background-color: #90b1b1;
-    color: #c34043;
+    color: @fujiGray;
 }
 
-#wireplumber.muted {
-    background-color: #c34043;
-}
-
-#custom-media {
-    min-width: 100px;
-}
-
-#custom-media.custom-spotify {
-    background-color: #98bb6c;
-}
-
-#custom-media.custom-vlc {
-    background-color: #ffa000;
+#temperature {
+    color: @springBlue;
 }
 
 #temperature.critical {
-    background-color: #c34043;
+    color: @peachRed;
 }
 
-#tray > .passive {
-    -gtk-icon-effect: dim;
+#idle_inhibitor {
+   color: @carpYellow;
 }
 
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
-    background-color: #eb4d4b;
+#tray {
 }
 
-#idle_inhibitor.activated {
-    background-color: #dcd7ba;
-    color: #090618;
+#custom-launcher {
+	margin-top:2px;
+	color: @fujiWhite;
 }
 
-#language {
-    background: #00b093;
-    color: #740864;
-    padding: 0 5px;
-    margin: 0 5px;
-    min-width: 16px;
+#custom-power {
+	margin-top:2px;
+	color: @autumnGreen;
 }
 
-#scratchpad {
-    background: rgba(0, 0, 0, 0.2);
+#window{
+	border-style: hidden;
+	margin-top: 1px;
 }
 
-#scratchpad.empty {
-	background-color: transparent;
+#custom-keyboard-layout{
+   color: @surimiOrange;
 }
 
-#privacy {
-    padding: 0;
+#custom-network_traffic{
+   color: @surimiOrange;
 }
 
-#privacy-item {
-    padding: 0 5px;
-    color: white;
-}
 
-#privacy-item.screenshare {
-    background-color: #cf5700;
-}
-
-#privacy-item.audio-in {
-    background-color: #1ca000;
-}
-
-#privacy-item.audio-out {
-    background-color: #0069d4;
-}
