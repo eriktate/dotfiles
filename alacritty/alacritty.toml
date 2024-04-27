@@ -5,8 +5,9 @@ shell = "/usr/bin/zsh"
 live_config_reload = true
 
 [font]
-normal = { family = "mononoki nerd font" }
+normal = { family = "mononoki nerd font mono" }
 size = 16
 
 [window]
 dimensions = { columns = 100, lines = 100 }
+opacity = 0.9

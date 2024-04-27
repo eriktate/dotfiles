@@ -70,6 +70,7 @@
 #input {
 	border: none;
 	background-color: rgba (0,0,0,0.6);
+	color: @fujiWhite;
 	border-radius: 5px;
 	margin: 4px 4px 8px 4px;
 	padding: 8px;
