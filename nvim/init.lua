@@ -357,9 +357,9 @@ for _, lsp in ipairs(servers) do
 	}
 
 	-- below is for building zls from source
-	if lsp == "zls" then
-		config.cmd = { HOME .. "/zls/zig-out/bin/zls" }
-	end
+	-- if lsp == "zls" then
+	-- 	config.cmd = { HOME .. "/zls/zig-out/bin/zls" }
+	-- end
 
 	if lsp == "rescriptls" then
 		config.cmd = {"node", HOME .. "/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
