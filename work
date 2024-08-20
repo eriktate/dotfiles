@@ -1,0 +1,4 @@
+#!/bin/bash
+
+root_dir="~/projects"
+projects=(figment "dr-todo" taskterm)

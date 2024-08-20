@@ -4,10 +4,14 @@ export GBM_BACKEND=nvidia-drm
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export WLR_NO_HARDWARE_CURSORS=1
 export XWAYLAND_NO_GLAMOR=1
-export GDK_BACKEND=wayland
-export MOZ_ENABLE_WAYLAND=1
 
 export WLR_RENDERER=vulkan
+export QT_QPA_PLATFORMTHEME="qt6ct"
+
+# Comment out for X11
+# export GDK_BACKEND=wayland
+# export MOZ_ENABLE_WAYLAND=1
+# export QT_QPA_PLATFORM=wayland
 
 # Env setup
 export GOPATH=~/go
@@ -63,3 +67,9 @@ zstyle ':completion:*:*:git:*' script ~/dotfiles/git-completion.bash
 fpath=(~/dotfiles $fpath)
 autoload -Uz compinit && compinit
 
+# Snap
+emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
+
+# Turso
+export PATH="/home/soggy/.turso:$PATH"
+eval "$(/home/soggy/.local/bin/mise activate zsh)"
