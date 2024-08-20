@@ -1,6 +1,6 @@
 # Output
-output HDMI-A-1 mode 3840x2160@119.880Hz pos 0 1080
-output DP-1 mode 1920x1080@60Hz pos 960 0
+output HDMI-A-5 mode 3840x2160@60Hz pos 0 1080
+output DP-3 mode 1920x1080@60Hz pos 960 0
 
 # Variables
 set $mod Mod4
@@ -23,8 +23,13 @@ for_window [title=".*\*float\*.*"] {
 	floating enable
 }
 
+floating_modifier $mod normal
+
 # Startup
-exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec --no-startup-id /usr/lib/xdg-desktop-portal-wlr -r
+
 exec swww-daemon
 exec swww img ~/wallpapers/pixel_cityscape.png
 exec mako

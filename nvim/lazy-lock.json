@@ -38,6 +38,7 @@
   "vim-gitgutter": { "branch": "main", "commit": "67ef116100b40f9ca128196504a2e0bc0a2753b0" },
   "vim-glsl": { "branch": "master", "commit": "bfd330a271933c3372fcfa8ce052970746c8e9dd" },
   "vim-go": { "branch": "master", "commit": "5332cd8f60340bf09f46ba1765b8661cd16041e4" },
+  "vim-godot": { "branch": "master", "commit": "f9c0b36b299efcc4aa4cb119a2be36a83fe10388" },
   "vim-graphql": { "branch": "master", "commit": "c1d6af3b93ec135e7e2fc182d4cae6cd0d9e20b1" },
   "vim-javascript": { "branch": "master", "commit": "c470ce1399a544fe587eab950f571c83cccfbbdc" },
   "vim-jsx-pretty": { "branch": "master", "commit": "6989f1663cc03d7da72b5ef1c03f87e6ddb70b41" },

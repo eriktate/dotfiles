@@ -43,6 +43,7 @@ require("lazy").setup({
 	"mfussenegger/nvim-dap",
 	"tpope/vim-dadbod",
 	"kristijanhusak/vim-dadbod-ui",
+	"habamax/vim-godot",
 
 	-- language plugins
 	"fatih/vim-go",
@@ -220,6 +221,9 @@ vim.keymap.set("v", "/", [[/\v]])
 vim.keymap.set("n", "<leader>rl", ":set rnu<cr>")
 vim.keymap.set("n", "<leader>al", ":set nornu<cr>")
 
+-- column limit/cut line
+vim.keymap.set("n", "<leader>cl", ':execute "set colorcolumn=" . (&colorcolumn == "" ? "120" : "")<CR>')
+
 -- telescope
 vim.keymap.set("n", "<C-p>", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope live_grep<cr>")
@@ -346,7 +350,7 @@ local on_attach = function(client, bufnr)
 	})
 end
 
-local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "htmx", "html", "cssls", "stylelint_lsp" }
+local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "htmx", "html", "cssls", "stylelint_lsp", "gdscript" }
 for _, lsp in ipairs(servers) do
 	config = {
 		on_attach = on_attach,
