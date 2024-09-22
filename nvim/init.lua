@@ -37,9 +37,9 @@ require("lazy").setup({
 	{ "prettier/vim-prettier", build="yarn install --frozen-lockfile --production" },
 	"wakatime/vim-wakatime",
 	"APZelos/blamer.nvim",
-	"mfussenegger/nvim-dap",
 	"junegunn/goyo.vim",
 	{ "stevearc/oil.nvim", opts = {}, dependencies = { "nvim-tree/nvim-web-devicons" } },
+	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 	"mfussenegger/nvim-dap",
 	"tpope/vim-dadbod",
 	"kristijanhusak/vim-dadbod-ui",
@@ -390,7 +390,27 @@ for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup(config)
 end
 
-local dap = require('dap')
+local dap = require("dap")
+local dapui = require("dapui")
+dapui.setup()
+
+-- automagically deal with debugging UI
+dap.listeners.before.attach.dapui_config = function()
+  dapui.open()
+end
+
+dap.listeners.before.launch.dapui_config = function()
+  dapui.open()
+end
+
+dap.listeners.before.event_terminated.dapui_config = function()
+  dapui.close()
+end
+
+dap.listeners.before.event_exited.dapui_config = function()
+  dapui.close()
+end
+
 dap.configurations.cpp = {
 	{
 		name = 'Launch',
@@ -412,7 +432,40 @@ dap.configurations.cpp = {
 	}
 }
 
+dap.adapters.lldb18 = {
+	type = 'executable',
+	command = '/usr/bin/lldb-dap-18',
+	name = 'lldb18',
+}
+
 dap.configurations.c = dap.configurations.cpp
 dap.configurations.odin = dap.configurations.cpp
+dap.configurations.zig = {
+	{
+		name = 'Launch',
+		type = 'lldb18',
+		request = 'launch',
+		program = function()
+			return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/zig-out/bin/', 'file')
+		end,
+		cwd = '${workspaceFolder}',
+		stopOnEntry = false,
+		args = {},
+	},
+	{
+		name = 'Attacdh to process',
+		type = 'lldb18',
+		request = 'attach',
+		pid = require ('dap.utils').pick_process,
+		args = {},
+	}
+}
+
+vim.keymap.set('n', '<leader>dc', function() dap.continue() end)
+vim.keymap.set('n', '<leader>dj', function() dap.step_over() end)
+vim.keymap.set('n', '<leader>dl', function() dap.step_into() end)
+vim.keymap.set('n', '<leader>dh', function() dap.step_out() end)
+vim.keymap.set('n', '<leader>b', function() dap.toggle_breakpoint() end)
+vim.keymap.set('n', '<leader>b', function() dap.toggle_breakpoint() end)
 
 -- END LSP CONFIG

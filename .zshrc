@@ -22,8 +22,7 @@ export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 # export ZIGBIN=$HOME/zig/build/stage3/bin
 export ZIGBIN=/usr/local/zig
-export ZLS_PATH=~/tools/zls/zig-out/bin
-export PATH=$PATH:$GOBIN:$ZIGBIN:$ZLS_PATH:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin
+export PATH=$PATH:$GOBIN:$ZIGBIN:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin
 if [[ $(uname) == "Darwin" ]]; then
 	eval $(/opt/homebrew/bin/brew shellenv)
 	source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -52,6 +51,8 @@ alias glint="golangci-lint run"
 alias gch='git checkout $(git branch -a | grep -v "^*" | fzf)'
 alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
 alias docker-rmi="sudo docker image rm \$(sudo docker image ls -aq)"
+
+source ~/scripts/*
 
 # Vi keybinds
 bindkey -v
