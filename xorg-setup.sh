@@ -9,4 +9,7 @@ xset s off         # screen saver off
 xset -dpms         # power saving off
 
 # mouse speed
+# wireless
 xinput --set-prop "pointer:Razer Razer Viper V3 Pro" "libinput Accel Speed" -1
+# wired
+xinput --set-prop "pointer:Razer Viper V3 Pro" "libinput Accel Speed" -1
