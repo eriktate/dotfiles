@@ -1,6 +1,7 @@
+
 import = ["~/dotfiles/alacritty/kanagawa.toml"]
 
-shell = "/usr/bin/zsh"
+shell = "/bin/zsh"
 
 live_config_reload = true
 
@@ -10,6 +11,40 @@ normal = { family = "mononoki nerd font mono" }
 size = 16 # normal
 # size = 28 # streaming
 
-# [window]
-# dimensions = { columns = 100, lines = 100 }
+[window]
+dimensions = { columns = 100, lines = 100 }
 # opacity = 0.9
+decorations = "none"
+
+# TODO (etate): these bindings were supposed to allow vim key binds like <C-S-j>, but didn't
+# work for some reason. I'd like to come back to it at some point
+# [[keyboard.bindings]]
+# key = "C"
+# mods = "Control | Shift"
+# action = "Copy"
+
+# [[keyboard.bindings]]
+# key = "V"
+# mods = "Control | Shift"
+# action = "Paste"
+
+# [[keyboard.bindings]]
+# mods = "Control | Shift"
+# key = "H"
+# chars = "\u0048" # capital H
+
+# [[keyboard.bindings]]
+# mods = "Control | Shift"
+# key = "J"
+# chars = "\u004a" # capital J
+
+# [[keyboard.bindings]]
+# mods = "Control | Shift"
+# key = "K"
+# chars = "\u004b" # capital K
+
+# [[keyboard.bindings]]
+# mods = "Control | Shift"
+# key = "L"
+# chars = "\u004c" # capital L
+
