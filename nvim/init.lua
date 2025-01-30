@@ -34,7 +34,7 @@ require("lazy").setup({
 	"airblade/vim-gitgutter",
 	"tpope/vim-fugitive",
 	"folke/trouble.nvim",
-	{ "prettier/vim-prettier", build="yarn install --frozen-lockfile --production" },
+	-- { "prettier/vim-prettier", build="yarn install --frozen-lockfile --production" },
 	"wakatime/vim-wakatime",
 	"APZelos/blamer.nvim",
 	"junegunn/goyo.vim",
@@ -44,6 +44,7 @@ require("lazy").setup({
 	"tpope/vim-dadbod",
 	"kristijanhusak/vim-dadbod-ui",
 	"habamax/vim-godot",
+	"sindrets/diffview.nvim",
 
 	-- language plugins
 	"fatih/vim-go",
@@ -60,7 +61,8 @@ require("lazy").setup({
 	"maxmellon/vim-jsx-pretty",
 	"eriktate/vim-protobuf",
 	"eriktate/vim-syntax-extra",
-	{ "evanleck/vim-svelte", branch="main" },
+	-- { "evanleck/vim-svelte", branch="main" },
+	"leafOfTree/vim-svelte-plugin",
 	"othree/html5.vim",
 	"lifepillar/pgsql.vim",
 	"NoahTheDuke/vim-just",
@@ -242,10 +244,10 @@ vim.g.svelte_preprocessor_tags = {
 vim.g.svelte_preprocessors = { "ts" }
 
 -- prettier
-vim.g["prettier#config#parser"] = "typescript"
-vim.g["prettier#autoformat"] = 1
-vim.g["prettier#autoformat_require_pragma"] = 0
-vim.g["prettier#quickfix_auto_focus"] = 0
+-- vim.g["prettier#config#parser"] = "javascript"
+-- vim.g["prettier#autoformat"] = 1
+-- vim.g["prettier#autoformat_require_pragma"] = 0
+-- vim.g["prettier#quickfix_auto_focus"] = 0
 
 -- postgres
 vim.g.sql_type_default = 'pgsql'
@@ -261,7 +263,6 @@ local treesitter = require('nvim-treesitter.configs')
 treesitter.setup({
 	ensure_installed = { "go", "rust", "c", "typescript", "tsx", "gleam", "templ" },
 	auto_install = true,
-	ignore_install = { "javascript" },
 	highlight = {
 		enable = true,
 	}
@@ -339,8 +340,8 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
 	vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references, bufopts)
+	vim.keymap.set('n', '<leader>fmt', vim.lsp.buf.format, bufopts)
 
-	vim.api.nvim_create_augroup('AutoFormatting', {})
 	vim.api.nvim_create_autocmd('BufWritePre', {
 	  -- pattern = '*',
 	  group = 'AutoFormatting',
@@ -350,7 +351,8 @@ local on_attach = function(client, bufnr)
 	})
 end
 
-local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "htmx", "html", "cssls", "stylelint_lsp", "gdscript" }
+-- servers removed: htmx
+local servers = { "ts_ls", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "html", "cssls", "stylelint_lsp", "gdscript", "glsl_analyzer" }
 for _, lsp in ipairs(servers) do
 	config = {
 		on_attach = on_attach,
@@ -366,25 +368,27 @@ for _, lsp in ipairs(servers) do
 	-- end
 
 	if lsp == "rescriptls" then
-		config.cmd = {"node", HOME .. "/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
+		-- config.cmd = {"node", HOME .. "/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
+		-- config.cmd = {"node", HOME .. "/.local/share/nvim/lazy/vim-rescript/extension/server/out/server.js", "--stdio"}
+		config.cmd = {"pnpm", "exec", "rescript-language-server", "--stdio"}
 	end
 
 	if lsp == "cssls" then
-		config.cmd = { "bunx", "vscode-css-language-server", "--stdio" }
+		config.cmd = { "pnpm", "exec", "vscode-css-language-server", "--stdio"}
 	end
 
 	if lsp == "html" then
-		config.cmd = { "bunx", "vscode-html-language-server", "--stdio" }
+		config.cmd = { "pnpm", "exec", "vscode-html-language-server", "--stdio" }
 		-- config.init_options = { provideFormatter = false }
 	end
 
 	if lsp == "stylelint_lsp" then
-		config.cmd = { "bunx", "stylelint-lsp", "--stdio" }
+		config.cmd = { "pnpm", "exec", "stylelint-lsp", "--stdio" }
 		config.filetypes = { "css" }
 	end
 
-	if lsp == "tsserver" then
-		config.cmd = { "bunx", "typescript-language-server", "--stdio" }
+	if lsp == "ts_ls" then
+		config.cmd = { "pnpm", "exec", "typescript-language-server", "--stdio" }
 	end
 
 	nvim_lsp[lsp].setup(config)

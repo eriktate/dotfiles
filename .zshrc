@@ -42,7 +42,7 @@ PROMPT='%F{blue}%n@%m%f[%*]:%F{yellow}[%~]%f%F{green}${vcs_info_msg_0_}%f${NEWLI
 alias ls='ls --color=auto'
 alias gs="git status"
 alias vim="nvim"
-alias vimrc="vim ~/.config/nvim/init.vim"
+alias vimrc="vim ~/.config/nvim/init.lua"
 alias bashrc="vim ~/dotfiles/.bashrc"
 alias gocover="go test -covermode=count -coverprofile=coverage.out ./... && go tool cover -html=coverage.out"
 alias gotest="go test -cover -v"
@@ -74,3 +74,11 @@ emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
 # Turso
 export PATH="/home/soggy/.turso:$PATH"
 eval "$(/home/soggy/.local/bin/mise activate zsh)"
+
+# pnpm
+export PNPM_HOME="/home/soggy/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

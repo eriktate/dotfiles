@@ -13,3 +13,6 @@ xset -dpms         # power saving off
 xinput --set-prop "pointer:Razer Razer Viper V3 Pro" "libinput Accel Speed" -1
 # wired
 xinput --set-prop "pointer:Razer Viper V3 Pro" "libinput Accel Speed" -1
+
+# glorious
+xinput --set-prop "pointer:Glorious Model O- Wireless" "libinput Accel Speed" -1
