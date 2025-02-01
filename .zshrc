@@ -1,3 +1,5 @@
+# export TERM=alacritty
+
 # Wayland/sway stuff
 export LIBVA_DRIVER_NAME=nvidia
 export GBM_BACKEND=nvidia-drm
@@ -14,9 +16,11 @@ export QT_QPA_PLATFORMTHEME="qt6ct"
 # export QT_QPA_PLATFORM=wayland
 
 # Env setup
-export GOPATH=~/go
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+export LIMA_HOME=$HOME/projects/.lima
 
 export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
@@ -40,9 +44,8 @@ PROMPT='%F{blue}%n@%m%f[%*]:%F{yellow}[%~]%f%F{green}${vcs_info_msg_0_}%f${NEWLI
 
 # Aliases
 alias ls='ls --color=auto'
-alias gs="git status"
 alias vim="nvim"
-alias vimrc="vim ~/.config/nvim/init.vim"
+alias vimrc="vim ~/.config/nvim/init.lua"
 alias bashrc="vim ~/dotfiles/.bashrc"
 alias gocover="go test -covermode=count -coverprofile=coverage.out ./... && go tool cover -html=coverage.out"
 alias gotest="go test -cover -v"
@@ -51,6 +54,14 @@ alias glint="golangci-lint run"
 alias gch='git checkout $(git branch -a | grep -v "^*" | fzf)'
 alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
 alias docker-rmi="sudo docker image rm \$(sudo docker image ls -aq)"
+alias tpbuild="~/projects/tpbuild/tpbuild"
+
+# Git alias
+alias gs="git status"
+alias gf="git fetch"
+alias girb="git rebase -i"
+alias gfp="git push --force-with-lease"
+alias lg="lazygit"
 
 source ~/scripts/*
 
@@ -59,12 +70,13 @@ bindkey -v
 bindkey -M viins 'jk' vi-cmd-mode
 
 # Highlighting
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue
 ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue
 ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
 
 # Git completion
-zstyle ':completion:*:*:git:*' script ~/dotfiles/git-completion.bash
+zstyle ':completion:*:*:git:*' script ~/dotfiles/git-completion.zsh
 fpath=(~/dotfiles $fpath)
 autoload -Uz compinit && compinit
 
@@ -72,5 +84,9 @@ autoload -Uz compinit && compinit
 emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
 
 # Turso
-export PATH="/home/soggy/.turso:$PATH"
-eval "$(/home/soggy/.local/bin/mise activate zsh)"
+export PATH="$HOME/.turso:$PATH"
+
+# mac stuff
+eval "$($HOME/.local/bin/mise activate zsh)"
+source ~/work.sh
+export PATH="/opt/homebrew/opt/socket_vmnet/bin:$PATH"

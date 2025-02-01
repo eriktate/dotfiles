@@ -66,7 +66,11 @@ fish_add_path $GOROOT/bin
 fish_add_path $GOROOT/bin
 fish_add_path $ODIN
 
+<<<<<<< HEAD
 nvm use latest &> /dev/null
+=======
+# nvm use 16 &> /dev/null
+>>>>>>> c50fa32 (adding work config changes (mainly .zshrc))
 
 # pnpm
 set -gx PNPM_HOME "/home/erik/.local/share/pnpm"

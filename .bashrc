@@ -92,6 +92,7 @@ export CPATH="./include:./lib"
 source ~/.awsrc
 source ~/.linode
 source ~/.vultr
+source ~/.rkt.bash
 alias aws-et="export AWS_SECRET_ACCESS_KEY=${ET_SECRET_KEY} && export AWS_ACCESS_KEY_ID=${ET_ACCESS_KEY}"
 
 export NVM_DIR="$HOME/.nvm"

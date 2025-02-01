@@ -41,9 +41,6 @@ Plug 'othree/html5.vim'
 Plug 'lifepillar/pgsql.vim'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
-Plug 'simrat39/rust-tools.nvim'
-Plug 'NoahTheDuke/vim-just'
-Plug 'elixir-editors/vim-elixir'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
