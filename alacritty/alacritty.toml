@@ -1,0 +1,15 @@
+import = ["~/dotfiles/alacritty/kanagawa.toml"]
+
+shell = "/usr/bin/zsh"
+
+live_config_reload = true
+
+[font]
+normal = { family = "mononoki nerd font mono" }
+# size = 12 
+size = 16 # normal
+# size = 28 # streaming
+
+# [window]
+# dimensions = { columns = 100, lines = 100 }
+# opacity = 0.9

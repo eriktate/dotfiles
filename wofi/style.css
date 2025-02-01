@@ -1,0 +1,108 @@
+@define-color sumiInk0      #16161D;
+@define-color sumiInk1      #181820;
+@define-color sumiInk2      #1a1a22;
+@define-color sumiInk3      #1F1F28;
+@define-color sumiInk4      #2A2A37;
+@define-color sumiInk5      #363646;
+@define-color sumiInk6      #54546D;
+@define-color waveBlue1     #223249;
+@define-color waveBlue2     #2D4F67;
+@define-color winterGreen   #2B3328;
+@define-color winterYellow  #49443C;
+@define-color winterRed     #43242B;
+@define-color winterBlue    #252535;
+@define-color autumnGreen   #76946A;
+@define-color autumnRed     #C34043;
+@define-color autumnYellow  #DCA561;
+@define-color samuraiRed    #E82424;
+@define-color roninYellow   #FF9E3B;
+@define-color waveAqua1     #6A9589;
+@define-color dragonBlue    #658594;
+@define-color oldWhite      #C8C093;
+@define-color fujiWhite     #DCD7BA;
+@define-color fujiGray      #727169;
+@define-color oniViolet     #957FB8;
+@define-color oniViolet2    #b8b4d0;
+@define-color crystalBlue   #7E9CD8;
+@define-color springViolet1 #938AA9;
+@define-color springViolet2 #9CABCA;
+@define-color springBlue    #7FB4CA;
+@define-color lightBlue     #A3D4D5;
+@define-color springGreen   #98BB6C;
+@define-color boatYellow1   #938056;
+@define-color boatYellow2   #C0A36E;
+@define-color carpYellow    #E6C384;
+@define-color sakuraPink    #D27E99;
+@define-color waveRed       #E46876;
+@define-color peachRed      #FF5D62;
+@define-color surimiOrange  #FFA066;
+@define-color katanaGray    #717C7C;
+
+#entry {
+	border-radius: 5px;
+	padding: 5px 2px 5px 2px;
+	margin: 0px 4px 0px 4px;
+}
+
+@keyframes fadeIn {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+#entry:selected {
+	color: @oldWhite;
+	background-color: @oniViolet;
+	padding: 7px;
+}
+ 
+#text:selected {
+	color: @fujiWhite;
+}
+ 
+#window {
+	animation-name: fadeIn;
+	animation-duration: 0.6s;
+	background-color: transparent;
+	font-family: Mononoki Nerd Font;
+	font-size: 16;
+}
+
+#input {
+	border: none;
+	background-color: rgba (0,0,0,0.6);
+	color: @fujiWhite;
+	border-radius: 5px;
+	margin: 4px 4px 8px 4px;
+	padding: 8px;
+}
+
+#input:focused {
+	box-shadow: 0 0 0 2px @oniViolet;
+}
+
+#inner-box {
+	color: rgba (255,0,0,0.5);
+	border-radius: 5px;
+	/* margin-right: 180px; */
+}
+
+#outer-box {
+	background-color: rgba (0,0,0,0.5);
+	border-radius: 5px;
+	border: 1px solid @fujiGray;
+	padding: 10px;
+	box-shadow: 0px 0px 3px 1px  @sumiInk0;
+	margin: 0px;
+}
+
+#scroll {
+}
+
+#text {
+	color: @fujiWhite;
+	background-color: transparent;
+} 
+
+#img {
+  background-color: transparent;
+}

@@ -1,0 +1,188 @@
+/* =============================================================================
+ *
+ * Waybar configuration
+ *
+ * Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+ *
+ * =========================================================================== */
+
+@define-color sumiInk0      #16161D;
+@define-color sumiInk1      #181820;
+@define-color sumiInk2      #1a1a22;
+@define-color sumiInk3      #1F1F28;
+@define-color sumiInk4      #2A2A37;
+@define-color sumiInk5      #363646;
+@define-color sumiInk6      #54546D;
+@define-color waveBlue1     #223249;
+@define-color waveBlue2     #2D4F67;
+@define-color winterGreen   #2B3328;
+@define-color winterYellow  #49443C;
+@define-color winterRed     #43242B;
+@define-color winterBlue    #252535;
+@define-color autumnGreen   #76946A;
+@define-color autumnRed     #C34043;
+@define-color autumnYellow  #DCA561;
+@define-color samuraiRed    #E82424;
+@define-color roninYellow   #FF9E3B;
+@define-color waveAqua1     #6A9589;
+@define-color dragonBlue    #658594;
+@define-color oldWhite      #C8C093;
+@define-color fujiWhite     #DCD7BA;
+@define-color fujiGray      #727169;
+@define-color oniViolet     #957FB8;
+@define-color oniViolet2    #b8b4d0;
+@define-color crystalBlue   #7E9CD8;
+@define-color springViolet1 #938AA9;
+@define-color springViolet2 #9CABCA;
+@define-color springBlue    #7FB4CA;
+@define-color lightBlue     #A3D4D5;
+@define-color springGreen   #98BB6C;
+@define-color boatYellow1   #938056;
+@define-color boatYellow2   #C0A36E;
+@define-color carpYellow    #E6C384;
+@define-color sakuraPink    #D27E99;
+@define-color waveRed       #E46876;
+@define-color peachRed      #FF5D62;
+@define-color surimiOrange  #FFA066;
+@define-color katanaGray    #717C7C;
+
+/* -----------------------------------------------------------------------------
+ * Base styles
+ * -------------------------------------------------------------------------- */
+
+/* Reset all styles */
+
+* {
+	color: @fujiWhite;
+	border: 0;
+	border-radius: 0;
+	padding: 0 0;
+	font-family: Mononoki Nerd Font, Symbols Nerd Font Mono;
+	font-size: 18pt;
+	margin-right: 5px;
+	margin-left: 5px;
+	padding-bottom:2px;
+}
+
+window.DP-1 * {
+	font-size: 10pt;
+}
+
+window#waybar {
+	background: @sumiInk3;
+	border-radius: 20px 20px 20px 20px;
+}
+
+#workspaces button {
+	padding: 2px 0px;
+	border-bottom: 2px;
+	color: @fujiWhite;
+	border-color: @oldWhite;
+	border-style: solid;
+	margin-top:2px;
+}
+
+#workspaces button.active {
+	border-color: @oniViolet;
+}
+
+#clock, #battery, #cpu, #memory,#idle_inhibitor, #temperature,#custom-keyboard-layout, #backlight, #network, #pulseaudio, #tray, #window,#custom-launcher,#custom-power,#custom-pacman ,#custom-network_traffic,#custom-weather{
+	padding: 0 1rem;
+}
+
+/* -----------------------------------------------------------------------------
+ * Module styles
+ * -------------------------------------------------------------------------- */
+
+#battery {
+    color: @autumnGreen;
+}
+
+#battery.charging {
+    color: @surimiOrange;
+}
+
+@keyframes blink {
+    to {
+        color: #4c566a;
+        background-color: #eceff4;
+    }
+}
+
+#battery.critical:not(.charging) {
+    background: @peachRed;
+    color: @fujiWhite;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#cpu {
+    color: @springGreen;
+}
+
+#memory {
+    color: @sakuraPink;
+}
+
+#network.disabled {
+    color: @peachRed;
+}
+
+#network{
+    color: @autumnGreen;
+}
+
+#network.disconnected {
+    color: @peachRed;
+}
+
+#pulseaudio {
+    color: @oniViolet;
+}
+
+#pulseaudio.muted {
+    color: @fujiGray;
+}
+
+#temperature {
+    color: @springBlue;
+}
+
+#temperature.critical {
+    color: @peachRed;
+}
+
+#idle_inhibitor {
+   color: @carpYellow;
+}
+
+#tray {
+}
+
+#custom-launcher {
+	margin-top:2px;
+	color: @fujiWhite;
+}
+
+#custom-power {
+	margin-top:2px;
+	color: @autumnGreen;
+}
+
+#window{
+	border-style: hidden;
+	margin-top: 1px;
+}
+
+#custom-keyboard-layout{
+   color: @surimiOrange;
+}
+
+#custom-network_traffic{
+   color: @surimiOrange;
+}
+
+

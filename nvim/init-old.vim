@@ -6,15 +6,20 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/nvim-cmp'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'jiangmiao/auto-pairs'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'folke/trouble.nvim'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+Plug 'wakatime/vim-wakatime'
+Plug 'dag/vim-fish'
+Plug 'APZelos/blamer.nvim'
 
 """ Language plugins
 Plug 'fatih/vim-go'
@@ -31,7 +36,14 @@ Plug 'jparise/vim-graphql'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'eriktate/vim-protobuf'
 Plug 'eriktate/vim-syntax-extra'
-Plug 'evanleck/vim-svelte'
+Plug 'evanleck/vim-svelte', { 'branch': 'main' }
+Plug 'othree/html5.vim'
+Plug 'lifepillar/pgsql.vim'
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+Plug 'simrat39/rust-tools.nvim'
+Plug 'NoahTheDuke/vim-just'
+Plug 'elixir-editors/vim-elixir'
 
 """ Visuals
 Plug 'morhetz/gruvbox'
@@ -119,6 +131,7 @@ set softtabstop=4
 set noexpandtab
 
 """ Filetype settings
+autocmd! BufNewFile,BufRead *.vs, *.fs set ft=glsl
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype javascript.jsx setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript setlocal ts=2 sts=2 sw=2 expandtab
@@ -127,8 +140,7 @@ autocmd Filetype typescriptreact setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype svelte setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype rescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype html setlocal ts=2 sts=2 sw=2 expandtab
-
-" autocmd Filetype glsl setlocal commentstring=// %s
+autocmd Filetype glsl setlocal commentstring=//\ %s
 
 """ CoC settings
 " let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
@@ -156,11 +168,21 @@ let g:svelte_preprocessor_tags = [
 	\ ]
 let g:svelte_preprocessors = ['ts']
 
+""" prettier config
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
+
+""" postgres
+let g:sql_type_default = 'pgsql'
+
+""" rust
+let g:rustfmt_autosave = 1
+
 """ NVIM LSP Config
 lua << EOF
 local telescope = require('telescope')
 telescope.setup{
-	defaults = { file_ignore_patterns = {"vendor"} }
+	defaults = { file_ignore_patterns = {"vendor", "deps", "_build"} }
 }
 
 local nvim_lsp = require('lspconfig')
@@ -176,33 +198,31 @@ cmp.setup({
 	}
 })
 
+local opts = { noremap=true, silent=true }
+
 local on_attach = function(client, bufnr)
-	local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-	local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-	buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-	local opts = { noremap=true, silent=true }
-
-	buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-	buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-	buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-	buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+	local bufopts = { noremap=true, silent=true, buffer=bufnr }
+	vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+	vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+	vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+	vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 end
 
-local servers = { 'rust_analyzer', 'tsserver', 'gopls', 'svelte', 'zls', 'rescriptls'}
+local servers = { 'tsserver', 'gopls', 'svelte', 'zls', 'rescriptls'}
 for _, lsp in ipairs(servers) do
 	config = {
 		on_attach = on_attach,
 		flags = {
 			debounce_text_changes = 150,
 		},
-		capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+		capabilities = require('cmp_nvim_lsp').default_capabilities(),
 	}
 
 	if lsp == 'zls' then
-		config.cmd = { '/home/erik/zls/zls' }
+		config.cmd = { '/home/erik/zls/zig-out/bin/zls' }
 	end
 
 	if lsp == 'rescriptls' then
@@ -211,4 +231,12 @@ for _, lsp in ipairs(servers) do
 
 	nvim_lsp[lsp].setup(config)
 end
+
+local rt = require("rust-tools")
+ rt.setup({
+	server = {
+		on_attach = on_attach,
+		standalone = true,
+	}
+})
 EOF

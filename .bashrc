@@ -14,6 +14,8 @@ if [[ ! "$SSH_AUTH_SOCK" ]]; then
     eval "$(<~/.ssh-agent-thing)"
 fi
 
+# export TERM="xterm-256color"
+
 # Load fzf config if present
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules,vendor,target,*.bs.js,zig-cache}" 2> /dev/null'
@@ -29,7 +31,8 @@ alias qemu='qemu-system-x86_64'
 #### LANG STUFF ####
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
-export ZIGPATH=/usr/local/zig
+# export ZIGPATH=/usr/local/zig
+export ZIGPATH=$HOME/zig/build
 export ZIGBIN=$ZIGPATH/bin
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
@@ -37,7 +40,7 @@ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 export PATH=$PATH:$GOBIN:$ZIGBIN:$HOME/.cargo/bin:/usr/local/bin:~/.local/bin:/home/eriktate/.gem/ruby/2.5.0/bin:/home/eriktate/.yarn/bin:~/apps/protoc/bin/:/usr/local/go/bin:/usr/local/Postman:/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin:/usr/local/janet:/usr/lib/zig/0.8.0
-export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin:/usr/local/jre/bin
+export PATH=$PATH:~/.pyenv/bin:~/aseprite/build/bin:~/bin:$NVIM_PATH/bin:/usr/local/jre/bin:~/wabt/build:/usr/local/firefox
 
 #### BECAUSE I'M LAZY ####
 alias gs="git status"
@@ -49,7 +52,9 @@ alias gotest="go test -cover -v"
 alias gofulltest="go test -v -cover -covermode=count -coverprofile=.coverage.out ./... && go tool cover -func .coverage.out | grep total: | awk '{printf \"total code coverage: %s\\n\", \$3}' && go tool cover -html=.coverage.out -o coverage.html"
 alias glint="golangci-lint run"
 alias clip="xclip -sel clip"
-alias kill-screenkey="kill -9 $(ps aux | grep screenkey | grep -v grep | awk '{print $2}')"
+alias kill-screenkey='kill -9 $(ps aux | grep screenkey | grep -v grep | awk "{print $2}")'
+alias flmngo="~/projects/flmngo/api/tmux.sh"
+alias gch='git checkout $(git branch -a | grep -v "^*" | fzf)'
 
 #### DOCKER ALIASES ####
 alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
@@ -86,6 +91,8 @@ export CPATH="./include:./lib"
 
 source ~/.awsrc
 source ~/.linode
+source ~/.vultr
+source ~/.rkt.bash
 alias aws-et="export AWS_SECRET_ACCESS_KEY=${ET_SECRET_KEY} && export AWS_ACCESS_KEY_ID=${ET_ACCESS_KEY}"
 
 export NVM_DIR="$HOME/.nvm"
@@ -93,7 +100,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # init pyenv
-# eval "$(pyenv init --path)"
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 . "$HOME/.cargo/env"
 

@@ -1,0 +1,32 @@
+color=#DCD7BA # fujiWhite
+
+command=/usr/share/i3blocks/$BLOCK_NAME
+
+[volume]
+label=
+instance=Master
+interval=once
+signal=10
+
+[cpu_usage]
+label=
+interval=10
+min_width=100.00%
+
+[memory]
+label= 
+instance=mem_free
+interval=5
+min_width=: 100.00%
+
+[iface]
+interval=10
+separator=false
+
+[bandwidth]
+instance=enp4s0
+interval=5
+
+[time]
+command=date +"%a %b %d %H:%M"
+interval=5
