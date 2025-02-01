@@ -35,7 +35,7 @@ alias gs="git status"
 alias vimrc="vim ~/.config/nvim/init.lua"
 alias bashrc="vim ~/.config/fish/config.fish"
 alias flmngo="~/projects/flmngo/api/tmux.sh"
-alias versate="~/projects/versate/api/tmux.sh"
+alias versate="cd ~/projects/versate/api && ./tmux.sh"
 alias rust-analyzer="rustup run stable rust-analyzer"
 alias gch='git branch --all | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 alias tmux="TERM=xterm-256color command tmux"
@@ -49,6 +49,7 @@ set -gx ZIGPATH $HOME/zig/build
 set -gx ZIGBIN $ZIGPATH/stage3/bin
 set -gx RUST_SRC_PATH (rustc --print sysroot)/lib/rustlib/src/rust/sr
 set -gx RUSTUP_STABLE_BIN $HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin
+set -gx ODIN ~/odin
 
 # the path
 fish_add_path /usr/local/nvim/bin
@@ -63,10 +64,9 @@ fish_add_path $HOME/.pyenv/bin
 fish_add_path $HOME/aseprite/build/bin
 fish_add_path $GOROOT/bin
 fish_add_path $GOROOT/bin
-fish_add_path $HOME/odin
-fish_add_path $HOME/odin/ols
+fish_add_path $ODIN
 
-# nvm use 16 &> /dev/null
+nvm use latest &> /dev/null
 
 # pnpm
 set -gx PNPM_HOME "/home/erik/.local/share/pnpm"
