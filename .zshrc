@@ -1,14 +1,12 @@
-# export TERM=alacritty
-
 # Wayland/sway stuff
-export LIBVA_DRIVER_NAME=nvidia
-export GBM_BACKEND=nvidia-drm
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
-export WLR_NO_HARDWARE_CURSORS=1
-export XWAYLAND_NO_GLAMOR=1
+# export LIBVA_DRIVER_NAME=nvidia
+# export GBM_BACKEND=nvidia-drm
+# export __GLX_VENDOR_LIBRARY_NAME=nvidia
+# export WLR_NO_HARDWARE_CURSORS=1
+# export XWAYLAND_NO_GLAMOR=1
 
-export WLR_RENDERER=vulkan
-export QT_QPA_PLATFORMTHEME="qt6ct"
+# export WLR_RENDERER=vulkan
+# export QT_QPA_PLATFORMTHEME="qt6ct"
 
 # Comment out for X11
 # export GDK_BACKEND=wayland
@@ -26,7 +24,7 @@ export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 # export ZIGBIN=$HOME/zig/build/stage3/bin
 export ZIGBIN=/usr/local/zig
-export PATH=$PATH:$GOBIN:$ZIGBIN:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin
+export PATH=$PATH:$GOBIN:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin
 if [[ $(uname) == "Darwin" ]]; then
 	eval $(/opt/homebrew/bin/brew shellenv)
 	source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -90,3 +88,11 @@ export PATH="$HOME/.turso:$PATH"
 eval "$($HOME/.local/bin/mise activate zsh)"
 source ~/work.sh
 export PATH="/opt/homebrew/opt/socket_vmnet/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/home/soggy/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

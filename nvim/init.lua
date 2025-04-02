@@ -62,7 +62,8 @@ require("lazy").setup({
 	"maxmellon/vim-jsx-pretty",
 	"eriktate/vim-protobuf",
 	"eriktate/vim-syntax-extra",
-	{ "evanleck/vim-svelte", branch="main" },
+	"leafoftree/vim-svelte-plugin",
+	-- { "evanleck/vim-svelte", branch="main" },
 	"othree/html5.vim",
 	"lifepillar/pgsql.vim",
 	"NoahTheDuke/vim-just",
@@ -256,6 +257,7 @@ vim.keymap.set("n", "<C-p>", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope live_grep<cr>")
 vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>")
 
+vim.keymap.set("n", "<leader>fmt", vim.lsp.buf.format)
 -- ez delete
 vim.keymap.set("n", "<leader>dd", "<cmd>call delete(expand('%'))<cr>")
 
@@ -268,14 +270,20 @@ vim.g.go_imports_mode = 'gopls'
 vim.g.go_gopls_local = 'github.com/gravitational/teleport'
 
 -- vim-svelte
+-- evanlecke
 vim.g.svelte_preprocessor_tags = {
 	{ name = "ts", tag = "script", as = "typescript" },q
 }
 vim.g.svelte_preprocessors = { "ts" }
 
+-- leafoftree
+vim.g.vim_svelte_plugin_use_typescript = 1
+vim.g.vim_svelte_plugin_load_full_syntax = 1
+vim.g.vim_svelte_plugin_has_init_indent = 0
+
 -- prettier
 vim.g["prettier#config#parser"] = "typescript"
--- vim.g["prettier#autoformat"] = 1
+vim.g["prettier#autoformat"] = 1
 vim.g["prettier#autoformat_require_pragma"] = 0
 vim.g["prettier#quickfix_auto_focus"] = 0
 
@@ -347,6 +355,15 @@ cmp.setup({
 
 vim.api.nvim_create_augroup('AutoFormatting', {})
 
+local lsp_format = function(bufnr)
+	vim.lsp.buf.format({
+		filter = function(client)
+			return true -- no LSPs being filtered right now
+		end,
+		bufnr = bufnr,
+	})
+end
+
 local tscope_builtin = require("telescope.builtin")
 local on_attach = function(client, bufnr)
 	api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -358,17 +375,16 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set('n', 'gr', tscope_builtin.lsp_references, bufopts)
 
-	vim.api.nvim_create_augroup('AutoFormatting', {})
 	vim.api.nvim_create_autocmd('BufWritePre', {
-	  buffer = bufnr,
-	  group = 'AutoFormatting',
-	  callback = function()
-		vim.lsp.buf.format()
-	  end,
+		buffer = bufnr,
+		group = 'AutoFormatting',
+		callback = function()
+			lsp_format(bufnr)
+		end,
 	})
 end
 
-local servers = { "tsserver", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "htmx", "html", "cssls", "stylelint_lsp", "gdscript" }
+local servers = { "ts_ls", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "htmx", "html", "cssls", "stylelint_lsp", "gdscript" }
 for _, lsp in ipairs(servers) do
 	config = {
 		on_attach = on_attach,
@@ -399,37 +415,13 @@ for _, lsp in ipairs(servers) do
 		}
 	end
 
-	-- if lsp == "cssls" then
-	-- 	config.cmd = { "bunx", "vscode-css-language-server", "--stdio" }
-	-- end
-
-	-- if lsp == "html" then
-	-- 	config.cmd = { "bunx", "vscode-html-language-server", "--stdio" }
-	-- 	config.init_options = { provideFormatter = false }
-	-- end
-
-	-- if lsp == "stylelint_lsp" then
-	-- 	config.cmd = { "bunx", "stylelint-lsp", "--stdio" }
-	-- 	config.filetypes = { "css" }
-	-- end
-
-	-- if lsp == "tsserver" then
-	-- 	config.cmd = { "bunx", "typescript-language-server", "--stdio" }
-	-- end
+	if lsp == "cssls" then
+		config.init_options = {
+			provideFormatter = true,
+		}
+	end
 
 	nvim_lsp[lsp].setup(config)
-	-- capabilities = require("cmp_nvim_lsp").default_capabilities()
-	-- nvim_lsp[lsp].setup({
-	-- 	on_attach = on_attach,
-	-- 	flags = {
-	-- 		debounce_text_changes = 150,
-	-- 	},
-	-- 	capabilities = capabilities,
-	-- 	single_file_support = (nvim_lsp[lsp] or {}).single_file_support,
-	-- 	root_dir = (nvim_lsp[lsp] or {}).root_dir,
-	-- 	settings = (nvim_lsp[lsp] or {}).settings,
-	-- 	filetypes = (nvim_lsp[lsp] or {}).filetypes,
-	-- })
 end
 
 -- DAP configurations
