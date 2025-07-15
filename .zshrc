@@ -13,6 +13,15 @@
 # export MOZ_ENABLE_WAYLAND=1
 # export QT_QPA_PLATFORM=wayland
 
+eval $(ssh-agent) &> /dev/null
+ssh-add ~/.ssh/id &> /dev/null
+
+# helpers
+function is_darwin() {
+	[[ "$(uname)" == "Darwin" ]] && return
+	false
+}
+
 # Env setup
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
@@ -24,13 +33,12 @@ export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 # export ZIGBIN=$HOME/zig/build/stage3/bin
 export ZIGBIN=/usr/local/zig
-export PATH=$PATH:$GOBIN:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin
-if [[ $(uname) == "Darwin" ]]; then
-	eval $(/opt/homebrew/bin/brew shellenv)
-	source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-else
-	source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
+export PATH=$PATH:$GOBIN:$GOROOT/bin:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin:/usr/local/lua_ls/bin
+
+# mac stuff
+is_darwin && eval $(/opt/homebrew/bin/brew shellenv)
+is_darwin && source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+is_darwin || source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Prompt
 autoload -Uz vcs_info
@@ -68,7 +76,6 @@ bindkey -v
 bindkey -M viins 'jk' vi-cmd-mode
 
 # Highlighting
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue
 ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue
 ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
@@ -79,7 +86,7 @@ fpath=(~/dotfiles $fpath)
 autoload -Uz compinit && compinit
 
 # Snap
-emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
+is_darwin || emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
 
 # Turso
 export PATH="$HOME/.turso:$PATH"

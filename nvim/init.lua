@@ -19,7 +19,7 @@ require("lazy").setup({
 	-- tooling
 	"nvim-lua/popup.nvim",
 	"nvim-lua/plenary.nvim",
-	{ "nvim-treesitter/nvim-treesitter", build=":TSUpdate" },
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	"nvim-telescope/telescope.nvim",
 	"neovim/nvim-lspconfig",
 	"hrsh7th/nvim-cmp",
@@ -33,11 +33,35 @@ require("lazy").setup({
 	"jiangmiao/auto-pairs",
 	"airblade/vim-gitgutter",
 	"tpope/vim-fugitive",
-	"folke/trouble.nvim",
-	{ "prettier/vim-prettier", build="yarn install --frozen-lockfile --production" },
+	{
+		"folke/trouble.nvim",
+		opts = {},
+		cmd = "Trouble",
+		keys = {
+			{
+				"<leader>xX",
+				"<cmd>Trouble diagnostics toggle<cr>",
+				desc = "Diagnostics (Trouble)",
+			},
+			{
+				"<leader>xx",
+				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+				desc = "Buffer Diagnostics (Trouble)",
+			},
+		},
+	},
+	{
+		"stevearc/aerial.nvim",
+		opts = {},
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
+	},
+	{ "prettier/vim-prettier",           build = "yarn install --frozen-lockfile --production" },
 	"wakatime/vim-wakatime",
 	"APZelos/blamer.nvim",
-	{ "stevearc/oil.nvim", opts = {}, dependencies = { "nvim-tree/nvim-web-devicons" } },
+	{ "stevearc/oil.nvim",    opts = {},                                                          dependencies = { "nvim-tree/nvim-web-devicons" } },
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 	"habamax/vim-godot",
 	"leoluz/nvim-dap-go",
@@ -110,7 +134,7 @@ vim.opt.listchars = {
 	nbsp = "+",
 }
 vim.cmd([[match errorMsg /\s\+$/]])
-vim.diagnostic.config({virtual_lines=true})
+vim.diagnostic.config({ virtual_lines = true })
 
 -- tab behaviour
 vim.opt.tabstop = 4
@@ -169,7 +193,7 @@ api.nvim_create_autocmd(
 	"FileType",
 	{
 		group = group_id,
-		pattern = {"glsl", "rescript", "c", "cpp"},
+		pattern = { "glsl", "rescript", "c", "cpp" },
 		command = [[setlocal commentstring=//\ %s]],
 	}
 )
@@ -238,8 +262,8 @@ vim.keymap.set("", "<C-Space>k", "<C-w>R")
 vim.keymap.set("", "<C-Space>l", "<C-w>r")
 
 -- visual line traversal
-vim.keymap.set("n", "j", "gj", { remap=true })
-vim.keymap.set("n", "k", "gk", { remap=true })
+vim.keymap.set("n", "j", "gj", { remap = true })
+vim.keymap.set("n", "k", "gk", { remap = true })
 
 -- enhanced text search
 vim.keymap.set("n", "/", [[/\v]])
@@ -272,7 +296,7 @@ vim.g.go_gopls_local = 'github.com/gravitational/teleport'
 -- vim-svelte
 -- evanlecke
 vim.g.svelte_preprocessor_tags = {
-	{ name = "ts", tag = "script", as = "typescript" },q
+	{ name = "ts", tag = "script", as = "typescript" }, q
 }
 vim.g.svelte_preprocessors = { "ts" }
 
@@ -298,13 +322,13 @@ vim.g.goyo_linenr = 1
 
 
 local telescope = require('telescope')
-telescope.setup{
-	defaults = { file_ignore_patterns = {"vendor", "deps", "_build", "target"} }
+telescope.setup {
+	defaults = { file_ignore_patterns = { "vendor", "deps", "_build", "target" } }
 }
 
 -- treesitter
 require('nvim-treesitter.configs').setup({
-	ensure_installed = { "c", "cpp", "lua", "go", "rust", "zig", "odin", "typescript", "tsx", "ocaml", "gleam", "vim", "glsl", "fish", "bash", "hcl", "markdown", "html", "css", "proto", "json", "sql", "templ"},
+	ensure_installed = { "c", "cpp", "lua", "go", "rust", "zig", "odin", "typescript", "tsx", "ocaml", "gleam", "vim", "glsl", "fish", "bash", "hcl", "markdown", "html", "css", "proto", "json", "sql", "templ" },
 	auto_install = true,
 	highlight = {
 		enable = true,
@@ -312,25 +336,41 @@ require('nvim-treesitter.configs').setup({
 })
 --oil
 require('oil').setup({
-  keymaps = {
-    ["g?"] = "actions.show_help",
-    ["<CR>"] = "actions.select",
-    ["<C-s>"] = "actions.select_vsplit",
-    ["<C-t>"] = "actions.select_tab",
-    ["<C-p>"] = "actions.preview",
-    ["<C-c>"] = "actions.close",
-    ["<C-;>"] = "actions.refresh",
-    ["-"] = "actions.parent",
-    ["_"] = "actions.open_cwd",
-    ["`"] = "actions.cd",
-    ["~"] = "actions.tcd",
-    ["gs"] = "actions.change_sort",
-    ["gx"] = "actions.open_external",
-    ["g."] = "actions.toggle_hidden",
-    ["g\\"] = "actions.toggle_trash",
-  },
-  use_default_keymaps = false,
+	keymaps = {
+		["g?"] = "actions.show_help",
+		["<CR>"] = "actions.select",
+		["<C-s>"] = "actions.select_vsplit",
+		["<C-t>"] = "actions.select_tab",
+		["<C-p>"] = "actions.preview",
+		["<C-c>"] = "actions.close",
+		["<C-;>"] = "actions.refresh",
+		["-"] = "actions.parent",
+		["_"] = "actions.open_cwd",
+		["`"] = "actions.cd",
+		["~"] = "actions.tcd",
+		["gs"] = "actions.change_sort",
+		["gx"] = "actions.open_external",
+		["g."] = "actions.toggle_hidden",
+		["g\\"] = "actions.toggle_trash",
+	},
+	use_default_keymaps = false,
 })
+
+-- aerial
+require("aerial").setup({
+	on_attach = function(bufnr)
+		vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+		vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+	end,
+})
+vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
+
+-- Trouble
+-- show diagnostics for the entire project
+vim.keymap.set("n", "<leader>xa", "<cmd>Trouble diagnostics toggle<cr>")
+-- show diagnostics for the current buffer
+vim.keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>")
+
 -- END PLUGIN CONFIGS
 --
 -- BEGIN LSP CONFIG
@@ -384,44 +424,176 @@ local on_attach = function(client, bufnr)
 	})
 end
 
-local servers = { "ts_ls", "gopls", "zls", "rescriptls", "rust_analyzer", "svelte", "terraformls", "pyright", "ols", "clangd", "ocamllsp", "nixd", "gleam", "templ", "htmx", "html", "cssls", "stylelint_lsp", "gdscript" }
-for _, lsp in ipairs(servers) do
-	config = {
-		on_attach = on_attach,
-		flags = {
-			debounce_text_changes = 150,
-		},
-		capabilities = require("cmp_nvim_lsp").default_capabilities(),
-	}
-
-	if lsp == "rescriptls" then
-		config.cmd = {"node", HOME .. "/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio"}
-	end
-
-	if lsp == "clangd" then
-		config.cmd = {"clangd", "--log=verbose"}
-	end
-
-	if lsp == "gopls" then
-		config.settings = {
-			gopls = {
+local lsps = {
+	{
+		name = "gopls",
+		core = true,
+		cfg = {
+			settings = {
 				analyses = {
-					shadow = true,
+					-- shadow = true,
 					unusedvariable = true,
 				},
 				staticcheck = true,
 				["local"] = "github.com/gravitational/teleport",
 			},
-		}
+		},
+	},
+	{
+		name = "zls",
+		core = true,
+		cfg = {},
+	},
+	{
+		name = "clangd",
+		core = true,
+		cfg = {
+			cmd = { "clangd", "--log=verbose" }
+		},
+	},
+	{
+		name = "rust_analyzer",
+		core = true,
+		cfg = {},
+	},
+	{
+		name = "ts_ls",
+		core = true,
+		cfg = {},
+	},
+	{
+		name = "lua_ls",
+		core = true,
+		cfg = {
+			on_init = function(client)
+				if client.workspace_folders then
+					local path = client.workspace_folders[1].name
+					if path ~= vim.fn.stdpath('config') and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+						return
+					end
+				end
+
+				client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+					runtime = {
+						version = 'LuaJIT',
+						path = {
+							'lua/?.lua',
+							'lua/?/init.lua',
+						},
+					},
+					workspace = {
+						checkThirdParty = false,
+						library = {
+							vim.env.VIMRUNTIME
+						},
+					},
+				})
+			end,
+			settings = {
+				Lua = {},
+			},
+		},
+	},
+	{
+		name = "terraformls",
+		core = true,
+		cfg = {},
+	},
+	{
+		name = "pyright",
+		core = true,
+		cfg = {},
+	},
+	{
+		name = "html",
+		core = true,
+		cfg = {},
+	},
+	{
+		name = "cssls",
+		core = true,
+		cfg = {
+			init_options = {
+				provideFormatter = true,
+			}
+		},
+	},
+	{
+		name = "marksman",
+		core = true,
+		cfg = {},
+	},
+	{
+		name = "rescriptls",
+		core = false,
+		cfg = {
+			cmd = { "node", HOME .. "/.vim/plugged/vim-rescript/extension/server/out/server.js", "--stdio" }
+		},
+	},
+	{
+		name = "svelte",
+		core = false,
+		cfg = {},
+	},
+	{
+		name = "gleam",
+		core = false,
+		cfg = {},
+	},
+	{
+		name = "ols",
+		core = false,
+		cfg = {},
+	},
+	{
+		name = "nixd",
+		core = false,
+		cfg = {},
+	},
+	{
+		name = "templ",
+		core = false,
+		cfg = {},
+	},
+	{
+		name = "ocamllsp",
+		core = false,
+		cfg = {},
+	},
+	{
+		name = "gdscript",
+		core = false,
+		cfg = {},
+	},
+}
+
+-- flip this to false to enable all LSPs
+local core_only = true
+
+-- this is a function just because lua doesn't support continue statements...
+local init_lsp = function(lsp)
+	if core_only and not lsp.core then
+		return
 	end
 
-	if lsp == "cssls" then
-		config.init_options = {
-			provideFormatter = true,
-		}
+	local cfg = lsp.cfg
+	cfg.on_attach = on_attach
+	if cfg.flags == nil then
+		cfg.flags = {}
 	end
 
-	nvim_lsp[lsp].setup(config)
+	if cfg.flags.debounce_text_changes == nil then
+		cfg.flags.debounce_text_changes = 150
+	end
+
+	cfg.capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+
+	nvim_lsp[lsp.name].setup(cfg)
+end
+
+for _, lsp in ipairs(lsps) do
+	init_lsp(lsp)
 end
 
 -- DAP configurations
@@ -485,7 +657,7 @@ dap.configurations.zig = {
 		name = 'Attacdh to process',
 		type = 'lldb18',
 		request = 'attach',
-		pid = require ('dap.utils').pick_process,
+		pid = require('dap.utils').pick_process,
 		args = {},
 	}
 }
