@@ -49,3 +49,10 @@ theme = Kanagawa Wave
 clipboard-read = allow
 clipboard-write = allow
 window-decoration = false
+
+keybind = ctrl+shift+l=reload_config
+
+# custom-shader = ./shaders/less-glitchy.glsl
+# custom-shader = ./shaders/bloom.glsl
+# custom-shader = ./shaders/tft.glsl
+

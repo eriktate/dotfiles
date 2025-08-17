@@ -3,7 +3,7 @@ local HOME = os.getenv('HOME')
 
 -- BEGIN PLUGINS
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",
@@ -296,7 +296,7 @@ vim.g.go_gopls_local = 'github.com/gravitational/teleport'
 -- vim-svelte
 -- evanlecke
 vim.g.svelte_preprocessor_tags = {
-	{ name = "ts", tag = "script", as = "typescript" }, q
+	{ name = "ts", tag = "script", as = "typescript" },
 }
 vim.g.svelte_preprocessors = { "ts" }
 
@@ -405,10 +405,10 @@ local lsp_format = function(bufnr)
 end
 
 local tscope_builtin = require("telescope.builtin")
-local on_attach = function(client, bufnr)
-	api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+local on_attach = function(client, buf)
+	vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = buf })
 
-	local bufopts = { noremap = true, silent = true, buffer = bufnr }
+	local bufopts = { noremap = true, silent = true, buffer = buf }
 	vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
 	vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
 	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
@@ -416,10 +416,10 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set('n', 'gr', tscope_builtin.lsp_references, bufopts)
 
 	vim.api.nvim_create_autocmd('BufWritePre', {
-		buffer = bufnr,
+		buffer = buf,
 		group = 'AutoFormatting',
 		callback = function()
-			lsp_format(bufnr)
+			lsp_format(buf)
 		end,
 	})
 end
