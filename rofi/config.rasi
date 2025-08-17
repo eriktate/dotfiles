@@ -1,0 +1,7 @@
+configuration {
+	drun {
+		scan-desktop: true;
+		parse-user: true;
+		parse-system: true;
+	}
+}

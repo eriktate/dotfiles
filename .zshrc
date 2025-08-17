@@ -13,14 +13,16 @@
 # export MOZ_ENABLE_WAYLAND=1
 # export QT_QPA_PLATFORM=wayland
 
-eval $(ssh-agent) &> /dev/null
-ssh-add ~/.ssh/id &> /dev/null
-
 # helpers
 function is_darwin() {
 	[[ "$(uname)" == "Darwin" ]] && return
 	false
 }
+
+if [[ -z "$HOME/.ssh/id_ed25519" ]]; then
+	eval $(ssh-agent)
+	ssh-add $HOME/.ssh/id_ed25519
+fi
 
 # Env setup
 export GOROOT=/usr/local/go
@@ -33,12 +35,21 @@ export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 # export ZIGBIN=$HOME/zig/build/stage3/bin
 export ZIGBIN=/usr/local/zig
-export PATH=$PATH:$GOBIN:$GOROOT/bin:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin:/usr/local/lua_ls/bin
+export PATH=$PATH:$GOBIN:$GOROOT/bin:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin:/usr/local/lua_ls/bin:/usr/local/odin
+
+alias cbcopy="xclip -sel clip"
+alias cppaste="xsel -ob"
 
 # mac stuff
 is_darwin && eval $(/opt/homebrew/bin/brew shellenv)
 is_darwin && source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+is_darwin && export PATH="/opt/homebrew/opt/socket_vmnet/bin:$PATH"
 is_darwin || source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+is_darwin && alias cbcopy="pbcopy"
+is_darwin && alias cbpaste="pbpaste"
+
+
+eval "$($HOME/.local/bin/mise activate zsh)"
 
 # Prompt
 autoload -Uz vcs_info
@@ -69,7 +80,7 @@ alias girb="git rebase -i"
 alias gfp="git push --force-with-lease"
 alias lg="lazygit"
 
-source ~/scripts/*
+source ~/scripts/* || true
 
 # Vi keybinds
 bindkey -v
@@ -90,11 +101,6 @@ is_darwin || emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
 
 # Turso
 export PATH="$HOME/.turso:$PATH"
-
-# mac stuff
-eval "$($HOME/.local/bin/mise activate zsh)"
-source ~/work.sh
-export PATH="/opt/homebrew/opt/socket_vmnet/bin:$PATH"
 
 # pnpm
 export PNPM_HOME="/home/soggy/.local/share/pnpm"

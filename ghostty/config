@@ -42,8 +42,12 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 font-family = mononoki nerd font mono
-font-size = 17
+# work
+font-size = 20
 font-thicken = false
+
+# stream
+# font-size = 26
 
 theme = Kanagawa Wave
 clipboard-read = allow

@@ -105,8 +105,14 @@ set $urgent_border_color "#dc322f"
 set $urgent_bg_color "#dc322f"
 set $urgent_text_color "#fdf6e3"
 
-set $font pango:mononoki Nerd Font Mono 24, Material Design Icons 19
-set $small_screen_font pango:mononoki Nerd Font Mono 16, Material Design Icons 13
+set $font pango:mononoki Nerd Font Mono 32
+set $small_screen_font pango:mononoki Nerd Font Mono 16
+
+# set $font pango:Nimbus Sans 24, Material Design Icons 19
+# set $small_screen_font pango:Nimbus Sans 16, Material Design Icons 13
+
+# set $font pango:Deja Vu Sans Mono 32
+# set $small_screen_font pango:Deja Vu Sans Mono 16
 font $font
 
 client.focused $oniViolet $sumiInk0 $fujiWhite $waveAqua1 $oniViolet
