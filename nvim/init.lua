@@ -411,7 +411,7 @@ local on_attach = function(client, buf)
 	local bufopts = { noremap = true, silent = true, buffer = buf }
 	vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
 	vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+	vim.keymap.set('n', '<leader>i', tscope_builtin.lsp_implementations, bufopts)
 	vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
 	vim.keymap.set('n', 'gr', tscope_builtin.lsp_references, bufopts)
 
