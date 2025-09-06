@@ -445,6 +445,11 @@ local lsps = {
 		cfg = {},
 	},
 	{
+		name = "ols",
+		core = true,
+		cfg = {},
+	},
+	{
 		name = "clangd",
 		core = true,
 		cfg = {

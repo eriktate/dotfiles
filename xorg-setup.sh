@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # monitor setup
 
 xrandr \
@@ -16,4 +18,4 @@ xinput --set-prop "pointer:  Hitscan 8k Dongle" "libinput Accel Speed" -0.65
 
 # wired
 # xinput --set-prop "pointer:Razer Viper V3 Pro" "libinput Accel Speed" -1
-xinput --set-prop "pointer:  Hitscan Hyperlight" "libinput Accel Speed" -1
+xinput --set-prop "pointer:  Hitscan Hyperlight" "libinput Accel Speed" -0.65
