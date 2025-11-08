@@ -59,7 +59,7 @@ require("lazy").setup({
 		},
 	},
 	{ "prettier/vim-prettier",           build = "yarn install --frozen-lockfile --production" },
-	"wakatime/vim-wakatime",
+	-- "wakatime/vim-wakatime",
 	"APZelos/blamer.nvim",
 	{ "stevearc/oil.nvim",    opts = {},                                                          dependencies = { "nvim-tree/nvim-web-devicons" } },
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
@@ -87,6 +87,7 @@ require("lazy").setup({
 	"eriktate/vim-protobuf",
 	"eriktate/vim-syntax-extra",
 	"leafoftree/vim-svelte-plugin",
+	"elkowar/yuck.vim",
 	-- { "evanleck/vim-svelte", branch="main" },
 	"othree/html5.vim",
 	"lifepillar/pgsql.vim",
@@ -568,7 +569,7 @@ local lsps = {
 }
 
 -- flip this to false to enable all LSPs
-local core_only = true
+local core_only = false
 
 -- this is a function just because lua doesn't support continue statements...
 local init_lsp = function(lsp)

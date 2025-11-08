@@ -23,7 +23,7 @@ function is_darwin() {
 }
 
 # Env setup
-export GOROOT=/usr/local/go
+export GOROOT=$HOME/.local/go
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
@@ -33,7 +33,7 @@ export EDITOR=nvim
 export NVIM_PATH=/usr/local/nvim
 # export ZIGBIN=$HOME/zig/build/stage3/bin
 export ZIGBIN=/usr/local/zig
-export PATH=$PATH:$GOBIN:$GOROOT/bin:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin:/usr/local/lua_ls/bin
+export PATH=$PATH:$GOBIN:$GOROOT/bin:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin:/usr/local/lua_ls/bin:$HOME/tools/aseprite/build/bin
 
 # mac stuff
 is_darwin && eval $(/opt/homebrew/bin/brew shellenv)
@@ -93,7 +93,9 @@ export PATH="$HOME/.turso:$PATH"
 
 # mac stuff
 eval "$($HOME/.local/bin/mise activate zsh)"
-source ~/work.sh
+if [[ -e "~/work.sh" ]]; then
+	source ~/work.sh
+fi
 export PATH="/opt/homebrew/opt/socket_vmnet/bin:$PATH"
 
 # pnpm

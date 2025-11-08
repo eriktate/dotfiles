@@ -1,19 +1,19 @@
 {
 	"layer": "top", // Waybar at top layer
 	"position": "top", // Waybar position (top|bottom|left|right)
-	"height": 40,
+	"height": 46,
 	"margin": "6px 128px",
 	"spacing":0,
 
 	// Choose the order of the modules
 
-	"modules-left": ["custom/launcher", "sway/workspaces" ],
-	"modules-center": [ "sway/window" ],
+	"modules-left": ["custom/launcher", "hyprland/workspaces" ],
+	"modules-center": [ "hyprland/window" ],
 	"modules-right": [ "custom/network_traffic", "temperature", "cpu", "memory", "pulseaudio", "tray", "idle_inhibitor", "clock", "custom/power"],
 
 	// Modules configuration
 
-	"sway/workspaces": {
+	"hyprland/workspaces": {
 		"format": "{icon}",
 		"on-click": "activate",
 		"all-outputs": false,
@@ -33,10 +33,10 @@
 			"default": ""
 		},
 	},
-	"sway/window": {
+	"hyprland/window": {
 		"format": "{}",
-		"icon":true,
-		"icon-size" : 20
+		"on-scroll-up": "hyprctl dispatch workspace e+1",
+		"on-scroll-down": "hyprctl dispatch workspace e-1",
 	},
 	"idle_inhibitor": {
 		"format": "{icon}",
