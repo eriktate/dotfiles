@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-swww init && swww img $HOME/Pictures/neon-shallows.webp &
+swww-daemon && swww img $HOME/Pictures/wallpaper.png &
 
 nm-applet --indicator &
 waybar &

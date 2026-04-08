@@ -1,44 +1,49 @@
-# Wayland/sway stuff
-# export LIBVA_DRIVER_NAME=nvidia
-# export GBM_BACKEND=nvidia-drm
-# export __GLX_VENDOR_LIBRARY_NAME=nvidia
-# export WLR_NO_HARDWARE_CURSORS=1
-# export XWAYLAND_NO_GLAMOR=1
+# Vi keybinds (happen first just in case something later in the file fails)
+bindkey -v
+bindkey -M viins 'jk' vi-cmd-mode
 
-# export WLR_RENDERER=vulkan
-# export QT_QPA_PLATFORMTHEME="qt6ct"
+setopt extendedglob
 
-# Comment out for X11
-# export GDK_BACKEND=wayland
-# export MOZ_ENABLE_WAYLAND=1
-# export QT_QPA_PLATFORM=wayland
-
+# auto-init SSH
 eval $(ssh-agent) &> /dev/null
 ssh-add ~/.ssh/id &> /dev/null
 
-# helpers
-function is_darwin() {
-	[[ "$(uname)" == "Darwin" ]] && return
-	false
-}
-
-# Env setup
 export GOROOT=$HOME/.local/go
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
-export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 export LIMA_HOME=$HOME/projects/.lima
-
 export EDITOR=nvim
-export NVIM_PATH=/usr/local/nvim
-# export ZIGBIN=$HOME/zig/build/stage3/bin
-export ZIGBIN=/usr/local/zig
-export PATH=$PATH:$GOBIN:$GOROOT/bin:$ZIGBIN:${ZIGBIN}13:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin:/opt/homebrew/opt/llvm/bin:$HOME/.cache/rebar3/bin:/usr/local/lua_ls/bin:$HOME/tools/aseprite/build/bin
+export NVIM_PATH=$HOME/.local/nvim
+export ZIG_ROOT=$HOME/.local/zig
+export ODIN_ROOT=$HOME/.local/odin
+export NODE_ROOT=$HOME/.local/node
+export TOOLS=$HOME/tools
 
-# mac stuff
-is_darwin && eval $(/opt/homebrew/bin/brew shellenv)
-is_darwin && source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-is_darwin || source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if command -v rustc &>/dev/null; then
+	export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+fi
+
+export PATH=$PATH:$GOBIN:$GOROOT/bin:$ZIG_ROOT:$ODIN_ROOT:$NVIM_PATH/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin::/usr/local/lua_ls/bin:$HOME/tools/aseprite/build/bin:$NODE_ROOT/bin
+export PATH=$PATH:$TOOLS/tfenv/bin
+
+# optionally source scripts in home directory
+for f in $HOME/scripts/**/*; do
+	source "$f"
+done
+
+# mac specific
+if [ "$(uname)" = "Darwin" ]; then
+	eval $(/opt/homebrew/bin/brew shellenv)
+	source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+	# Snap
+	emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
+
+	# Lima networking fix
+	export PATH="/opt/homebrew/opt/socket_vmnet/bin:$PATH"
+else # linux specific
+	source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 # Prompt
 autoload -Uz vcs_info
@@ -48,60 +53,29 @@ setopt PROMPT_SUBST
 NEWLINE=$'\n'
 PROMPT='%F{blue}%n@%m%f[%*]:%F{yellow}[%~]%f%F{green}${vcs_info_msg_0_}%f${NEWLINE}$ '
 
-# Aliases
-alias ls='ls --color=auto'
-alias vim="nvim"
-alias vimrc="vim ~/.config/nvim/init.lua"
-alias bashrc="vim ~/dotfiles/.bashrc"
-alias gocover="go test -covermode=count -coverprofile=coverage.out ./... && go tool cover -html=coverage.out"
-alias gotest="go test -cover -v"
-alias gofulltest="go test -v -cover -covermode=count -coverprofile=.coverage.out ./... && go tool cover -func .coverage.out | grep total: | awk '{printf \"total code coverage: %s\\n\", \$3}' && go tool cover -html=.coverage.out -o coverage.html"
-alias glint="golangci-lint run"
-alias gch='git checkout $(git branch -a | grep -v "^*" | fzf)'
-alias docker-rm="sudo docker container rm \$(sudo docker container ls -aq)"
-alias docker-rmi="sudo docker image rm \$(sudo docker image ls -aq)"
-alias tpbuild="~/projects/tpbuild/tpbuild"
-
-# Git alias
-alias gs="git status"
-alias gf="git fetch"
-alias girb="git rebase -i"
-alias gfp="git push --force-with-lease"
-alias lg="lazygit"
-
-source ~/scripts/*
-
-# Vi keybinds
-bindkey -v
-bindkey -M viins 'jk' vi-cmd-mode
-
 # Highlighting
 ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue
 ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue
 ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
 
-# Git completion
-zstyle ':completion:*:*:git:*' script ~/dotfiles/git-completion.zsh
-fpath=(~/dotfiles $fpath)
-autoload -Uz compinit && compinit
+# Aliases
+alias ls='ls --color=auto'
+alias vim="nvim"
+alias vimrc="vim ~/.config/nvim/init.lua"
+alias glint="golangci-lint run"
 
-# Snap
-is_darwin || emulate sh -c 'source /etc/profile.d/apps-bin-path.sh'
-
-# Turso
-export PATH="$HOME/.turso:$PATH"
-
-# mac stuff
-eval "$($HOME/.local/bin/mise activate zsh)"
-if [[ -e "~/work.sh" ]]; then
-	source ~/work.sh
-fi
-export PATH="/opt/homebrew/opt/socket_vmnet/bin:$PATH"
+# Git alias
+alias gs="git status"
+alias gfp="git push --force-with-lease"
+alias gch='git checkout $(git branch -a | grep -v "^*" | fzf)'
 
 # pnpm
-export PNPM_HOME="/home/soggy/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# opencode
+export PATH=/home/soggy/.opencode/bin:$PATH

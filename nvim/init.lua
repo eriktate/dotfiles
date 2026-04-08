@@ -19,7 +19,7 @@ require("lazy").setup({
 	-- tooling
 	"nvim-lua/popup.nvim",
 	"nvim-lua/plenary.nvim",
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	{ "nvim-treesitter/nvim-treesitter", lazy = false, build = ":TSUpdate" },
 	"nvim-telescope/telescope.nvim",
 	"neovim/nvim-lspconfig",
 	"hrsh7th/nvim-cmp",
@@ -65,14 +65,23 @@ require("lazy").setup({
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 	"habamax/vim-godot",
 	"leoluz/nvim-dap-go",
-	{ "davidmh/mdx.nvim", config = true, dependencies = { "nvim-treesitter/nvim-treesitter" } },
+	-- { "davidmh/mdx.nvim", config = true, dependencies = { "nvim-treesitter/nvim-treesitter" } },
 	"tpope/vim-dadbod",
 	"kristijanhusak/vim-dadbod-ui",
 	"Almo7aya/openingh.nvim",
 	"sindrets/diffview.nvim",
+	{ "supermaven-inc/supermaven-nvim", config = function() require("supermaven-nvim").setup({}) end, },
+	-- {
+	-- 	"NickyvanDyke/opencode.nvim",
+	-- 	dependencies = {
+	-- 		{ "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
+	-- 	},
+	-- 	config = function()
+	-- 		vim.g.opencode_opts = {}
+	-- 	end,
+	-- },
 
 	-- language plugins
-	"fatih/vim-go",
 	"hashivim/vim-terraform",
 	"rust-lang/rust.vim",
 	"tikhomirov/vim-glsl",
@@ -289,11 +298,6 @@ vim.keymap.set("n", "<leader>dd", "<cmd>call delete(expand('%'))<cr>")
 -- END KEYMAPS
 
 -- BEGIN PLUGIN CONFIGS
--- vim-go
-vim.g.go_metalinter_command = "golangci-lint"
-vim.g.go_imports_mode = 'gopls'
-vim.g.go_gopls_local = 'github.com/gravitational/teleport'
-
 -- vim-svelte
 -- evanlecke
 vim.g.svelte_preprocessor_tags = {
@@ -328,13 +332,14 @@ telescope.setup {
 }
 
 -- treesitter
-require('nvim-treesitter.configs').setup({
-	ensure_installed = { "c", "cpp", "lua", "go", "rust", "zig", "odin", "typescript", "tsx", "ocaml", "gleam", "vim", "glsl", "fish", "bash", "hcl", "markdown", "html", "css", "proto", "json", "sql", "templ" },
-	auto_install = true,
-	highlight = {
-		enable = true,
-	},
+local ts_languages = { "c", "cpp", "lua", "go", "rust", "zig", "odin", "typescript", "tsx", "ocaml", "gleam", "vim", "glsl", "fish", "bash", "hcl", "markdown", "html", "css", "proto", "json", "sql", "templ" }
+
+require("nvim-treesitter").install(ts_languages)
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = ts_languages,
+	callback = function() vim.treesitter.start() end,
 })
+
 --oil
 require('oil').setup({
 	keymaps = {
@@ -375,13 +380,12 @@ vim.keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle filter.buf=0<
 -- END PLUGIN CONFIGS
 --
 -- BEGIN LSP CONFIG
-local nvim_lsp = require('lspconfig')
-local cmp = require('cmp')
+local cmp = require("cmp")
 
 cmp.setup({
 	snippet = {
 		expand = function(args)
-			require('luasnip').lsp_expand(args.body)
+			require("luasnip").lsp_expand(args.body)
 		end
 	},
 	mapping = {
@@ -389,8 +393,9 @@ cmp.setup({
 		['<Tab>'] = cmp.mapping.confirm({ select = true }),
 	},
 	sources = {
-		{ name = 'nvim_lsp' },
-		{ name = 'buffer' },
+		{ name = "supermaven" },
+		{ name = "lsp" },
+		{ name = "buffer" },
 	}
 })
 
@@ -590,7 +595,8 @@ local init_lsp = function(lsp)
 	cfg.capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 
-	nvim_lsp[lsp.name].setup(cfg)
+	vim.lsp.config(lsp.name, cfg)
+	vim.lsp.enable(lsp.name)
 end
 
 for _, lsp in ipairs(lsps) do
